@@ -12,21 +12,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login', 301);
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login',[AuthController::class, 'login'])->name('login.process');
+Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 
-Route::get('/dashboard/admin',[adminController::class, 'index'])->name('admin.dashboard')
-->middleware(AuthMiddleware::class, RoleMiddleware::class . ':admin' );
+Route::get('/dashboard/admin', [adminController::class, 'index'])->name('admin.dashboard')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':admin');
+Route::post('/dashboard/admin/margin', [adminController::class, 'updateMargin'])->name('admin.dashboard.margin.update')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class. ':admin');
+Route::get('/dashboard/admin/barang', [adminController::class, 'dataBarang'])->name('admin.dashboard.barang');
 
-Route::get('/dashboard/manager',[managerController::class, 'index'])->name('manager.dashboard')
-->middleware(AuthMiddleware::class, RoleMiddleware::class . ':manager');
+Route::get('/dashboard/manager', [managerController::class, 'index'])->name('manager.dashboard')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':manager');
 
-Route::get('/dashboard/kasir',[kasirController::class, 'index'])->name('kasir.dashboard')
-->middleware(AuthMiddleware::class, RoleMiddleware::class . ':kasir');
+Route::get('/dashboard/kasir', [kasirController::class, 'index'])->name('kasir.dashboard')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':kasir');
 
-Route::get('/dashboard/gudang',[gudangController::class, 'index'])->name('gudang.dashboard')
-->middleware(AuthMiddleware::class, RoleMiddleware::class . ':gudang');
+Route::get('/dashboard/gudang', [gudangController::class, 'index'])->name('gudang.dashboard')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':gudang');
 
-Route::get('/dashboard/penjualan',[penjualanController::class, 'index'])->name('penjualan.dashboard')
-->middleware(AuthMiddleware::class, RoleMiddleware::class . ':penjualan');
+Route::get('/dashboard/penjualan', [penjualanController::class, 'index'])->name('penjualan.dashboard')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':penjualan');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
