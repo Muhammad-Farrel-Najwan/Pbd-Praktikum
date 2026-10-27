@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\VarDumper\Caster\RedisCaster;
-
 class AuthController extends Controller
 {
     //buat tampilkan halaman login
