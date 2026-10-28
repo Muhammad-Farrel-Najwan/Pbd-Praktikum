@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 class AuthController extends Controller
 {
-    //buat tampilkan halaman login
+    // buat tampilkan halaman login
     public function showLogin()
     {
-        return view('auth.login');
+        return view('login');
     }
 
-    //buat proses login nya
+    // buat proses login nya
 
     public function login(Request $request)
     {
@@ -39,7 +40,7 @@ class AuthController extends Controller
 
         if (
             empty($users) ||
-            !Hash::check($request->input('password'), $users[0]->password)
+            ! Hash::check($request->input('password'), $users[0]->password)
         ) {
             return back()
                 ->withErrors([
@@ -77,7 +78,7 @@ class AuthController extends Controller
             'staff-penjualan' => 'penjualan.dashboard',
         ];
 
-        if (!isset($dashboardRoutes[$roleSlug])) {
+        if (! isset($dashboardRoutes[$roleSlug])) {
             $request->session()->invalidate();
 
             return back()->withErrors([
