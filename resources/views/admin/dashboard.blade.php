@@ -806,7 +806,7 @@
                 </a>
 
                 {{-- Aktifkan tautan berikut setelah route fiturnya dibuat --}}
-                <a href="{{ route('admin.dashboard.barang   ') }}" class="nav-link">
+                <a href="{{ route('admin.dashboard.barang') }}" class="nav-link">
                     <span class="nav-icon">▤</span>
                     Data Barang
                 </a>

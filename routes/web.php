@@ -14,12 +14,20 @@ Route::redirect('/', '/login', 301);
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 
+//admin
 Route::get('/dashboard/admin', [adminController::class, 'index'])->name('admin.dashboard')
     ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':admin');
 Route::post('/dashboard/admin/margin', [adminController::class, 'updateMargin'])->name('admin.dashboard.margin.update')
-    ->middleware(AuthMiddleware::class, RoleMiddleware::class. ':admin');
-Route::get('/dashboard/admin/barang', [adminController::class, 'dataBarang'])->name('admin.dashboard.barang');
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':admin');
+Route::get('/dashboard/admin/barang', [adminController::class, 'dataBarang'])->name('admin.dashboard.barang')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':admin');
+Route::get('/dashboard/admin/barang/tambah', [adminController::class, 'createBarang'])->name('admin.barang.create')
+    ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':admin');
+Route::post('/dashboard/admin/barang', [adminController::class, 'storeBarang'])->name('admin.barang.store')
+->middleware(AuthMiddleware::class, RoleMiddleware::class. ':admin');
 
+
+//manager
 Route::get('/dashboard/manager', [managerController::class, 'index'])->name('manager.dashboard')
     ->middleware(AuthMiddleware::class, RoleMiddleware::class . ':manager');
 
