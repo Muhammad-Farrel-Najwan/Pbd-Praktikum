@@ -11,7 +11,7 @@
         ['label' => 'Data Barang', 'route' => 'admin.dashboard.barang', 'active' => ['admin.dashboard.barang', 'admin.barang.*'], 'icon' => 'box'],
         ['section' => 'Master Data'],
         ['label' => 'Data Satuan', 'route' => 'admin.dashboard.satuan', 'active' => 'admin.dashboard.satuan', 'icon' => 'ruler'],
-        ['label' => 'Data Vendor', 'icon' => 'truck', 'disabled' => true, 'badge' => 'Segera'],
+        ['label' => 'Data Vendor', 'route' => 'admin.dashboard.vendor', 'active' => ['admin.dashboard.vendor', 'admin.vendor.*'], 'icon' => 'truck'],
         ['label' => 'Manajemen User', 'icon' => 'users', 'disabled' => true, 'badge' => 'Segera'],
     ];
 @endphp

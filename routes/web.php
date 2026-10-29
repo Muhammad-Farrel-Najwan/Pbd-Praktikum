@@ -32,6 +32,9 @@ Route::middleware([AuthMiddleware::class])->group(function () {
             Route::get('/barang', [adminController::class, 'dataBarang'])->name('dashboard.barang');
             Route::get('/barang/tambah', [adminController::class, 'createBarang'])->name('barang.create');
             Route::post('/barang', [adminController::class, 'storeBarang'])->name('barang.store');
+            Route::get('/barang/{id}/edit', [adminController::class, 'editBarang'])->name('barang.edit');
+            Route::put('barang/{id}', [adminController::class, 'updateBarang'])->name('barang.update');
+            Route::delete('barang/{id}', [adminController::class, 'destroyBarang'])->name('barang.destroy');
 
             // route satuan
             Route::get('/satuan', [adminController::class, 'dataSatuan'])->name('dashboard.satuan');
@@ -39,6 +42,23 @@ Route::middleware([AuthMiddleware::class])->group(function () {
             Route::post('/satuan', [adminController::class, 'storeSatuan'])->name('satuan.store');
             Route::get('/satuan/{id}/edit', [adminController::class, 'editSatuan'])->name('satuan.edit');
             Route::put('/satuan/{id}', [adminController::class, 'updateSatuan'])->name('satuan.update');
+            Route::delete('satuan/{id}', [adminController::class, 'destroySatuan'])->name('satuan.destroy');
+
+            // route vendor
+            Route::get('/vendor', [adminController::class, 'dataVendor'])->name('dashboard.vendor');
+            Route::get('/vendor/tambah', [adminController::class, 'createVendor'])->name('vendor.create');
+            Route::post('/vendor', [adminController::class, 'storeVendor'])->name('vendor.store');
+            Route::get('/vendor/{id}/edit', [adminController::class, 'editVendor'])->name('vendor.edit');
+            Route::put('/vendor/{id}', [adminController::class, 'updateVendor'])->name('vendor.update');
+            Route::delete('/vendor/{id}', [adminController::class, 'destroyVendor'])->name('vendor.destroy');
+
+            //user route
+            Route::get('/user', [adminController::class, 'dataUser'])->name('dashboard.vendor');
+            Route::get('/user/tambah', [adminController::class, 'createUser'])->name('user.create');
+            Route::post('/user', [adminController::class, 'storeUser'])->name('user.store');
+            Route::get('/user/{id}/edit', [adminController::class, 'editUser'])->name('user.edit');
+            Route::put('/user/{id}', [adminController::class, 'updateUser'])->name('user.update');
+            Route::delete('/user/{id}', [adminController::class, 'destroyUser'])->name('user.destroy');
         });
 
     // Manager Route

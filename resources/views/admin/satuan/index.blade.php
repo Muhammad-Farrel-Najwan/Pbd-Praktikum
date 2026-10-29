@@ -20,6 +20,12 @@
             </x-ui.alert>
         @endif
 
+        @if (session('error'))
+            <x-ui.alert variant="error">
+                {{ session('error') }}
+            </x-ui.alert>
+        @endif
+
         <div class="rs-table-wrap">
             <table class="rs-table">
                 <thead>
@@ -50,14 +56,22 @@
                                 @endif
                             </td>
                             <td>
-                                <x-ui.button
-                                    href="{{ route('admin.satuan.edit', $item->id) }}"
-                                    variant="secondary"
-                                    size="sm"
-                                    icon="settings"
-                                >
-                                    Edit
-                                </x-ui.button>
+                                <div class="rs-table-actions">
+                                    <x-ui.button href="{{ route('admin.satuan.edit', $item->id) }}" variant="secondary"
+                                        size="sm" icon="settings">
+                                        Edit
+                                    </x-ui.button>
+
+                                    <form action="{{ route('admin.satuan.destroy', $item->id) }}" method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus satuan ini?')">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <x-ui.button type="submit" variant="danger" size="sm" icon="x">
+                                            Hapus
+                                        </x-ui.button>
+                                    </form> 
+                                </div>
                             </td>
                         </tr>
                     @empty

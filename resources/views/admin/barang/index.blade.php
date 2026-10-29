@@ -1,13 +1,6 @@
-<x-layouts.admin
-    title="Data Barang"
-    breadcrumb="RedStock / <span>Data Barang</span>"
-    topbar-title="Panel Administrator"
->
-    <x-ui.page-header
-        eyebrow="Master Data"
-        title="Data Barang"
-        description="Kelola dan pantau seluruh data barang yang terdaftar di RedStock."
-    >
+<x-layouts.admin title="Data Barang" breadcrumb="RedStock / <span>Data Barang</span>" topbar-title="Panel Administrator">
+    <x-ui.page-header eyebrow="Master Data" title="Data Barang"
+        description="Kelola dan pantau seluruh data barang yang terdaftar di RedStock.">
         <x-slot:actions>
             <x-ui.button href="{{ route('admin.dashboard') }}" variant="secondary" icon="arrow-left">
                 Dashboard
@@ -19,15 +12,17 @@
         </x-slot:actions>
     </x-ui.page-header>
 
-    <x-ui.panel
-        title="Daftar Barang"
-        description="Seluruh barang yang tersimpan di database RedStock."
-        :badge="count($barangs) . ' Barang'"
-        :flush="true"
-    >
+    <x-ui.panel title="Daftar Barang" description="Seluruh barang yang tersimpan di database RedStock."
+        :badge="count($barangs) . ' Barang'" :flush="true">
         @if (session('success'))
             <x-ui.alert variant="success">
                 {{ session('success') }}
+            </x-ui.alert>
+        @endif
+
+        @if (session('error'))
+            <x-ui.alert variant="error">
+                {{ session('error') }}
             </x-ui.alert>
         @endif
 
@@ -41,6 +36,7 @@
                         <th scope="col">Satuan</th>
                         <th scope="col" class="is-right">Harga</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
 
@@ -76,15 +72,37 @@
                                     <x-ui.badge variant="red" dot>Tidak Aktif</x-ui.badge>
                                 @endif
                             </td>
+                            <td>
+                                <div class="rs-table-actions">
+                                    <x-ui.button
+                                        href="{{ route('admin.barang.edit', $barang->id) }}"
+                                        variant="secondary"
+                                        size="sm"
+                                        icon="settings"
+                                    >
+                                        Edit
+                                    </x-ui.button>
+
+                                    <form
+                                        action="{{ route('admin.barang.destroy', $barang->id) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus barang ini?')"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <x-ui.button type="submit" variant="danger" size="sm" icon="x">
+                                            Hapus
+                                        </x-ui.button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">
-                                <x-ui.empty-state
-                                    icon="box"
-                                    title="Belum ada data barang"
-                                    description="Tambahkan barang pertama melalui tombol Tambah Barang."
-                                />
+                            <td colspan="7">
+                                <x-ui.empty-state icon="box" title="Belum ada data barang"
+                                    description="Tambahkan barang pertama melalui tombol Tambah Barang." />
                             </td>
                         </tr>
                     @endforelse
