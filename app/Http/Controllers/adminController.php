@@ -9,19 +9,20 @@ use Illuminate\Support\Facades\Hash;
 
 class adminController extends Controller
 {
-    // dashboard
+    // Dashboard
     public function index()
     {
+        // Ambil data margin
         $margins = DB::select(
-            '
-        select idmargin_penjualan,
-        persen,
-        status,
-        updated_at
-        from margin_penjualan
-        order by persen asc'
+            'SELECT idmargin_penjualan,
+                persen,
+                status,
+                updated_at
+         FROM margin_penjualan
+         ORDER BY persen ASC'
         );
 
+        // Cari margin aktif
         $activeMargin = null;
 
         foreach ($margins as $margin) {
@@ -31,9 +32,32 @@ class adminController extends Controller
             }
         }
 
+        // Ringkasan jumlah data master
+        $totalBarang = DB::select(
+            'SELECT COUNT(*) AS total FROM barang'
+        )[0]->total;
+
+        $totalSatuan = DB::select(
+            'SELECT COUNT(*) AS total FROM satuan'
+        )[0]->total;
+
+        $totalVendor = DB::select(
+            'SELECT COUNT(*) AS total FROM vendor'
+        )[0]->total;
+
+        $totalUser = DB::select(
+            'SELECT COUNT(*) AS total FROM `user`'
+        )[0]->total;
+
         return view('admin.dashboard', [
             'margins' => $margins,
             'activeMargin' => $activeMargin,
+
+            // Kirim ringkasan data master ke view
+            'totalBarang' => $totalBarang,
+            'totalSatuan' => $totalSatuan,
+            'totalVendor' => $totalVendor,
+            'totalUser' => $totalUser,
         ]);
     }
 
@@ -45,7 +69,7 @@ class adminController extends Controller
         ]);
 
         $idmargin = (int) $request->input('idmargin_penjualan');
-        $iduser = $request->session()->get('iduser');
+        $iduser = (int) $request->session()->get('iduser');
 
         // Pastikan margin tersedia
         $margin = DB::select(
@@ -97,10 +121,11 @@ class adminController extends Controller
     public function createBarang()
     {
         $satuans = DB::select(
-            'select idsatuan,
-            nama_satuan
-            from satuan
-            order by nama_satuan'
+            'SELECT idsatuan,
+                nama_satuan
+         FROM satuan
+         WHERE status = 1
+         ORDER BY nama_satuan ASC'
         );
 
         return view('admin.barang.create', [
@@ -115,16 +140,19 @@ class adminController extends Controller
             'jenis' => 'required|string|size:1',
             'nama' => 'required|string|max:45',
             'satuan_idsatuan' => 'required|integer|min:1',
-            'harga' => 'required|integer|min:0',
+            'harga' => 'required|integer|min:0|max:2147483647',
             'status' => 'required|in:0,1',
         ]);
-        // pastikan satuan yang terpilih aktif
+
+        $jenis = strtoupper($validated['jenis']);
+
+        // Pastikan satuan yang terpilih aktif
         $satuan = DB::select(
-            'select idsatuan
-            from satuan
-            where idsatuan = ?
-            and status = 1
-            limit 1',
+            'SELECT idsatuan
+         FROM satuan
+         WHERE idsatuan = ?
+           AND status = 1
+         LIMIT 1',
             [$validated['satuan_idsatuan']]
         );
 
@@ -136,17 +164,25 @@ class adminController extends Controller
                 ]);
         }
 
-        DB::insert(
-            'insert into barang(jenis, nama, satuan_idsatuan, status, harga)
-            values (?, ?, ?, ?, ?)',
-            [
-                $validated['jenis'],
-                $validated['nama'],
-                $validated['satuan_idsatuan'],
-                $validated['status'],
-                $validated['harga'],
-            ]
-        );
+        try {
+            DB::insert(
+                'INSERT INTO barang(jenis, nama, satuan_idsatuan, status, harga)
+             VALUES (?, ?, ?, ?, ?)',
+                [
+                    $jenis,
+                    $validated['nama'],
+                    $validated['satuan_idsatuan'],
+                    $validated['status'],
+                    $validated['harga'],
+                ]
+            );
+        } catch (QueryException $e) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'nama' => 'Barang gagal disimpan. Silakan periksa kembali data.',
+                ]);
+        }
 
         return redirect()
             ->route('admin.dashboard.barang')
@@ -195,12 +231,14 @@ class adminController extends Controller
     public function updateBarang(Request $request, $id)
     {
         $validated = $request->validate([
-            'jenis' => 'required|in:1,2',
+            'jenis' => 'required|string|size:1',
             'nama' => 'required|string|max:45',
-            'satuan_idsatuan' => 'required|integer',
-            'harga' => 'required|integer|min:0',
+            'satuan_idsatuan' => 'required|integer|min:1',
+            'harga' => 'required|integer|min:0|max:2147483647',
             'status' => 'required|in:0,1',
         ]);
+
+        $jenis = strtoupper($validated['jenis']);
 
         $barang = DB::select(
             'SELECT idbarang
@@ -253,7 +291,7 @@ class adminController extends Controller
                  status = ?
              WHERE idbarang = ?',
                 [
-                    $validated['jenis'],
+                    $jenis,
                     $validated['nama'],
                     $idSatuanBaru,
                     $validated['harga'],
@@ -427,19 +465,19 @@ class adminController extends Controller
             abort(404, 'Data satuan tidak ditemukan');
         }
         $statusLama = (int) $satuan[0]->status;
-        $statusBaru = $validated['status'];
+        $statusBaru = (int) $validated['status'];
 
         // aturan aktif nonaktif
         if ($statusLama === 1 && $statusBaru === 0) {
             $barang = DB::select(
-                'select idbarang
-                from satuan
-                where satuan_idsatuan = ?
-                limit 1',
+                'SELECT idbarang
+                FROM barang
+                WHERE satuan_idsatuan = ?
+                LIMIT 1',
                 [$id]
             );
 
-            if (empty($barang)) {
+            if (! empty($barang)) {
                 return back()
                     ->withInput()
                     ->withErrors([
@@ -450,13 +488,13 @@ class adminController extends Controller
 
         try {
             DB::update(
-                'update satuan
-                set nama_satuan = ?,
+                'UPDATE satuan
+                SET nama_satuan = ?,
                 status = ?
-                where idsatuan = ?',
+                WHERE idsatuan = ?',
                 [
                     $validated['nama_satuan'],
-                    $validated['status'],
+                    $statusBaru,
                     $id,
                 ]
             );
@@ -685,6 +723,7 @@ class adminController extends Controller
             ->route('admin.dashboard.vendor')
             ->with('success', 'Vendor berhasil dihapus.');
     }
+
     public function dataUser()
     {
         $users = DB::select(
@@ -697,6 +736,7 @@ class adminController extends Controller
             'users' => $users,
         ]);
     }
+
     public function createUser()
     {
         $roles = DB::select(
@@ -709,6 +749,7 @@ class adminController extends Controller
             'roles' => $roles,
         ]);
     }
+
     public function storeUser(Request $request)
     {
         $validated = $request->validate([
@@ -725,7 +766,7 @@ class adminController extends Controller
             [$validated['username']]
         );
 
-        if (!empty($existing)) {
+        if (! empty($existing)) {
             return back()
                 ->withInput($request->except(['password', 'password_confirmation']))
                 ->withErrors([
@@ -771,6 +812,7 @@ class adminController extends Controller
             ->route('admin.dashboard.user')
             ->with('success', 'User berhasil ditambahkan.');
     }
+
     public function editUser($id)
     {
         $users = DB::select(
@@ -796,6 +838,7 @@ class adminController extends Controller
             'roles' => $roles,
         ]);
     }
+
     public function updateUser(Request $request, $id)
     {
         $validated = $request->validate([
@@ -825,7 +868,7 @@ class adminController extends Controller
             [$validated['username'], $id]
         );
 
-        if (!empty($duplicate)) {
+        if (! empty($duplicate)) {
             return back()
                 ->withInput($request->except(['password', 'password_confirmation']))
                 ->withErrors([
@@ -850,7 +893,7 @@ class adminController extends Controller
         }
 
         try {
-            if (!empty($validated['password'])) {
+            if (! empty($validated['password'])) {
                 DB::update(
                     'UPDATE `user`
                  SET username = ?, role_idrole = ?, password = ?
@@ -886,6 +929,7 @@ class adminController extends Controller
             ->route('admin.dashboard.user')
             ->with('success', 'Data user berhasil diperbarui.');
     }
+
     public function destroyUser($id)
     {
         $users = DB::select(
@@ -926,7 +970,7 @@ class adminController extends Controller
                 [$id]
             );
 
-            if (!empty($references)) {
+            if (! empty($references)) {
                 return redirect()
                     ->route('admin.dashboard.user')
                     ->with(

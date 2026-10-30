@@ -52,8 +52,8 @@ Route::middleware([AuthMiddleware::class])->group(function () {
             Route::put('/vendor/{id}', [adminController::class, 'updateVendor'])->name('vendor.update');
             Route::delete('/vendor/{id}', [adminController::class, 'destroyVendor'])->name('vendor.destroy');
 
-            //user route
-            Route::get('/user', [adminController::class, 'dataUser'])->name('dashboard.vendor');
+            // user route
+            Route::get('/user', [adminController::class, 'dataUser'])->name('dashboard.user');
             Route::get('/user/tambah', [adminController::class, 'createUser'])->name('user.create');
             Route::post('/user', [adminController::class, 'storeUser'])->name('user.store');
             Route::get('/user/{id}/edit', [adminController::class, 'editUser'])->name('user.edit');
@@ -61,15 +61,23 @@ Route::middleware([AuthMiddleware::class])->group(function () {
             Route::delete('/user/{id}', [adminController::class, 'destroyUser'])->name('user.destroy');
         });
 
+    // Kasir Route
+    Route::middleware(RoleMiddleware::class.':kasir')
+        ->prefix('dashboard/kasir')
+        ->as('kasir.')
+        ->group(function () {
+            Route::get('/', [kasirController::class, 'index'])->name('dashboard');
+
+            // Penjualan
+            Route::get('/penjualan', [kasirController::class, 'dataPenjualan'])->name('penjualan.index');
+            Route::get('/penjualan/create', [kasirController::class, 'createPenjualan'])->name('penjualan.create');
+            Route::post('/penjualan', [kasirController::class, 'storePenjualan'])->name('penjualan.store');
+        });
+
     // Manager Route
     Route::get('/dashboard/manager', [managerController::class, 'index'])
         ->name('manager.dashboard')
         ->middleware(RoleMiddleware::class.':manager');
-
-    // Kasir Route
-    Route::get('/dashboard/kasir', [kasirController::class, 'index'])
-        ->name('kasir.dashboard')
-        ->middleware(RoleMiddleware::class.':kasir');
 
     // Gudang Route
     Route::get('/dashboard/gudang', [gudangController::class, 'index'])

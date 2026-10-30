@@ -8,11 +8,11 @@
     $navigation = [
         ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'icon' => 'grid'],
         ['label' => 'Margin Penjualan', 'url' => route('admin.dashboard') . '#pengaturan-margin', 'icon' => 'sliders'],
-        ['label' => 'Data Barang', 'route' => 'admin.dashboard.barang', 'active' => ['admin.dashboard.barang', 'admin.barang.*'], 'icon' => 'box'],
         ['section' => 'Master Data'],
+        ['label' => 'Data Barang', 'route' => 'admin.dashboard.barang', 'active' => ['admin.dashboard.barang', 'admin.barang.*'], 'icon' => 'box'],
         ['label' => 'Data Satuan', 'route' => 'admin.dashboard.satuan', 'active' => 'admin.dashboard.satuan', 'icon' => 'ruler'],
         ['label' => 'Data Vendor', 'route' => 'admin.dashboard.vendor', 'active' => ['admin.dashboard.vendor', 'admin.vendor.*'], 'icon' => 'truck'],
-        ['label' => 'Manajemen User', 'icon' => 'users', 'disabled' => true, 'badge' => 'Segera'],
+        ['label' => 'Manajemen User', 'route' => 'admin.dashboard.user', 'active' => ['admin.dashboard.user', 'admin.user.*'], 'icon' => 'users'],
     ];
 @endphp
 

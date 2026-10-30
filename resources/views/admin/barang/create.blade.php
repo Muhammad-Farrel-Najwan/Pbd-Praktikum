@@ -121,7 +121,7 @@
                                 Aktif
                             </option>
                             <option value="0" @selected(old('status') === '0')>
-                                Nonaktif
+                                Tidak Aktif
                             </option>
                         </select>
                     </x-ui.field>
@@ -158,7 +158,7 @@
 
                     <div>
                         <strong>Kode jenis</strong>
-                        <p>Jenis barang menggunakan satu karakter, misalnya A untuk alat tulis.</p>
+                        <p>Jenis barang menggunakan satu karakter, misalnya A untuk apparel.</p>
                     </div>
                 </div>
 
@@ -187,7 +187,7 @@
 
             <p class="rs-info-note">
                 Status <strong>Aktif</strong> menandai barang tersedia di daftar,
-                sedangkan <strong>Nonaktif</strong> menyimpan data tanpa menonjolkan barang tersebut.
+                sedangkan <strong>Tidak Aktif</strong> menyimpan data tanpa menonjolkan barang tersebut.
             </p>
         </x-ui.panel>
     </div>

@@ -26,6 +26,11 @@
             </x-ui.alert>
         @endif
 
+        @if (count($barangs) > 0)
+            <x-ui.table-search placeholder="Cari nama barang, kategori, atau satuan..." label="Cari data barang"
+                :total="count($barangs)" />
+        @endif
+
         <div class="rs-table-wrap">
             <table class="rs-table">
                 <thead>
@@ -42,7 +47,7 @@
 
                 <tbody>
                     @forelse ($barangs as $barang)
-                        <tr>
+                        <tr data-table-row>
                             <td>
                                 <span class="rs-mono">#{{ $barang->id }}</span>
                             </td>
@@ -106,6 +111,13 @@
                             </td>
                         </tr>
                     @endforelse
+
+                    <tr data-table-search-empty hidden>
+                        <td colspan="7">
+                            <x-ui.empty-state icon="search" title="Barang tidak ditemukan"
+                                description="Coba kata kunci lain atau bersihkan pencarian." />
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -26,6 +26,10 @@
             </x-ui.alert>
         @endif
 
+        @if (count($satuans) > 0)
+            <x-ui.table-search placeholder="Cari nama satuan..." label="Cari data satuan" :total="count($satuans)" />
+        @endif
+
         <div class="rs-table-wrap">
             <table class="rs-table">
                 <thead>
@@ -39,7 +43,7 @@
 
                 <tbody>
                     @forelse ($satuans as $item)
-                        <tr>
+                        <tr data-table-row>
                             <td>
                                 <span class="rs-mono">#{{ $item->id }}</span>
                             </td>
@@ -70,7 +74,7 @@
                                         <x-ui.button type="submit" variant="danger" size="sm" icon="x">
                                             Hapus
                                         </x-ui.button>
-                                    </form> 
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -82,6 +86,13 @@
                             </td>
                         </tr>
                     @endforelse
+
+                    <tr data-table-search-empty hidden>
+                        <td colspan="4">
+                            <x-ui.empty-state icon="search" title="Satuan tidak ditemukan"
+                                description="Coba kata kunci lain atau bersihkan pencarian." />
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

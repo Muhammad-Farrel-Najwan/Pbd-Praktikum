@@ -9,16 +9,10 @@
     }
 @endphp
 
-<x-layouts.admin
-    title="Dashboard Admin"
-    breadcrumb="RedStock / <span>Dashboard Admin</span>"
-    topbar-title="Panel Administrator"
->
-    <x-ui.page-header
-        eyebrow="Control Center"
-        title="Dashboard Admin"
-        description="Kelola data master dan konfigurasi sistem inventaris RedStock dari satu tempat."
-    >
+<x-layouts.admin title="Dashboard Admin" breadcrumb="RedStock / <span>Dashboard Admin</span>"
+    topbar-title="Panel Administrator">
+    <x-ui.page-header eyebrow="Control Center" title="Dashboard Admin"
+        description="Kelola data master dan konfigurasi sistem inventaris RedStock dari satu tempat.">
         <x-slot:actions>
             <span class="rs-date-chip">
                 <x-ui.icon name="calendar" :size="15" />
@@ -31,12 +25,9 @@
         </x-slot:actions>
     </x-ui.page-header>
 
-    <x-ui.hero
-        eyebrow="Panel Administrator"
-        :title="'Selamat datang, ' . session('username', 'Admin') . '!'"
+    <x-ui.hero eyebrow="Panel Administrator" :title="'Selamat datang, ' . session('username', 'Admin') . '!'"
         description="Pantau pengaturan sistem dan pastikan konfigurasi inventaris tetap sesuai kebutuhan operasional."
-        :delay="60"
-    >
+        :delay="60">
         <x-slot:aside>
             <span class="rs-hero-icon" aria-hidden="true">
                 <x-ui.icon name="sliders" />
@@ -50,7 +41,28 @@
             </div>
         </x-slot:aside>
     </x-ui.hero>
+    <section aria-labelledby="master-data-title">
+        <div class="rs-section-head">
+            <div>
+                <h2 id="master-data-title">Ringkasan Data Master</h2>
+                <p>Jumlah data master yang tersimpan dalam sistem inventaris.</p>
+            </div>
+        </div>
 
+        <div class="rs-stats">
+            <x-ui.stat-card label="Total Barang" :value="$totalBarang" note="Data barang terdaftar" icon="box"
+                tone="red" :delay="100" />
+
+            <x-ui.stat-card label="Total Satuan" :value="$totalSatuan" note="Jenis satuan barang" icon="ruler"
+                tone="blue" :delay="160" />
+
+            <x-ui.stat-card label="Total Vendor" :value="$totalVendor" note="Mitra pemasok terdaftar" icon="truck"
+                tone="green" :delay="220" />
+
+            <x-ui.stat-card label="Total User" :value="$totalUser" note="Akun pengguna sistem" icon="users"
+                tone="orange" :delay="280" />
+        </div>
+    </section>
     <section aria-labelledby="summary-title">
         <div class="rs-section-head">
             <div>
@@ -60,44 +72,20 @@
         </div>
 
         <div class="rs-stats">
-            <x-ui.stat-card
-                label="Pilihan Margin"
-                :value="count($margins)"
-                note="Total opsi margin di database"
-                icon="sliders"
-                tone="red"
-                :delay="100"
-            />
+            <x-ui.stat-card label="Pilihan Margin" :value="count($margins)" note="Total opsi margin di database"
+                icon="sliders" tone="red" :delay="100" />
 
-            <x-ui.stat-card
-                label="Margin Aktif"
-                :value="$currentMargin?->persen ?? '—'"
-                :suffix="$currentMargin ? '%' : ''"
-                note="Persentase margin yang berlaku"
-                icon="check"
-                tone="green"
-                :delay="160"
-            />
+            <x-ui.stat-card label="Margin Aktif" :value="$currentMargin?->persen ?? '—'" :suffix="$currentMargin ? '%' : ''"
+                note="Persentase margin yang berlaku" icon="check" tone="green" :delay="160" />
 
-            <x-ui.stat-card
-                label="Status Konfigurasi"
-                :value="$activeMargin !== null ? 'Tersedia' : 'Perlu Atur'"
-                :note="$activeMargin !== null ? 'Margin aktif ditemukan' : 'Belum ada margin aktif'"
-                icon="activity"
-                tone="blue"
-                :delay="220"
-            />
+            <x-ui.stat-card label="Status Konfigurasi" :value="$activeMargin !== null ? 'Tersedia' : 'Perlu Atur'" :note="$activeMargin !== null ? 'Margin aktif ditemukan' : 'Belum ada margin aktif'" icon="activity"
+                tone="blue" :delay="220" />
         </div>
     </section>
 
-    <x-ui.panel
-        id="pengaturan-margin"
-        title="Pengaturan Margin Penjualan"
-        description="Pilih margin yang akan digunakan sistem. Hanya satu margin yang boleh aktif."
-        :badge="count($margins) . ' Opsi Margin'"
-        :flush="true"
-        class="rs-margin-panel"
-    >
+    <x-ui.panel id="pengaturan-margin" title="Pengaturan Margin Penjualan"
+        description="Pilih margin yang akan digunakan sistem. Hanya satu margin yang boleh aktif." :badge="count($margins) . ' Opsi Margin'"
+        :flush="true" class="rs-margin-panel">
         @if (session('success'))
             <x-ui.alert variant="success">
                 {{ session('success') }}
@@ -126,13 +114,15 @@
 
                     <tbody>
                         @forelse ($margins as $margin)
-                            <tr @class(['rs-margin-row', 'is-selected' => (int) $margin->status === 1]) data-margin-row>
+                            <tr @class([
+                                'rs-margin-row',
+                                'is-selected' => (int) $margin->status === 1,
+                            ]) data-margin-row>
                                 <td class="rs-cell-radio">
                                     <input class="rs-radio" type="radio" name="idmargin_penjualan"
                                         value="{{ $margin->idmargin_penjualan }}"
                                         aria-label="Pilih margin {{ $margin->persen }} persen"
-                                        @checked((string) old('idmargin_penjualan', $activeMargin) === (string) $margin->idmargin_penjualan)
-                                        required>
+                                        @checked((string) old('idmargin_penjualan', $activeMargin) === (string) $margin->idmargin_penjualan) required>
                                 </td>
 
                                 <td>
@@ -163,11 +153,8 @@
                         @empty
                             <tr>
                                 <td colspan="4">
-                                    <x-ui.empty-state
-                                        icon="sliders"
-                                        title="Belum ada data margin"
-                                        description="Tambahkan data margin ke database terlebih dahulu."
-                                    />
+                                    <x-ui.empty-state icon="sliders" title="Belum ada data margin"
+                                        description="Tambahkan data margin ke database terlebih dahulu." />
                                 </td>
                             </tr>
                         @endforelse

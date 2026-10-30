@@ -37,6 +37,11 @@
             </x-ui.alert>
         @endif
 
+        @if (count($vendors) > 0)
+            <x-ui.table-search placeholder="Cari nama vendor atau badan usaha..." label="Cari data vendor"
+                :total="count($vendors)" />
+        @endif
+
         <div class="rs-table-wrap">
             <table class="rs-table">
                 <thead>
@@ -51,7 +56,7 @@
 
                 <tbody>
                     @forelse ($vendors as $vendor)
-                        <tr>
+                        <tr data-table-row>
                             <td>
                                 <span class="rs-mono">#{{ $vendor->id }}</span>
                             </td>
@@ -109,6 +114,13 @@
                             </td>
                         </tr>
                     @endforelse
+
+                    <tr data-table-search-empty hidden>
+                        <td colspan="5">
+                            <x-ui.empty-state icon="search" title="Vendor tidak ditemukan"
+                                description="Coba kata kunci lain atau bersihkan pencarian." />
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
