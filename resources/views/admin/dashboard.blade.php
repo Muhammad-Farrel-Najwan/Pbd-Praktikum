@@ -22,6 +22,10 @@
             <x-ui.button href="{{ route('admin.dashboard.barang') }}" variant="secondary" icon="box">
                 Data Barang
             </x-ui.button>
+
+            <x-ui.button href="{{ route('admin.dashboard.pengadaan') }}" variant="secondary" icon="package">
+                Data Pengadaan
+            </x-ui.button>
         </x-slot:actions>
     </x-ui.page-header>
 

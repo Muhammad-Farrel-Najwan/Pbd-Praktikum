@@ -8,16 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!$request->session()->has('iduser')){
+        if (! $request->session()->has('iduser')) {
             return redirect()->route('login');
         }
+
         return $next($request);
     }
 }
