@@ -8,9 +8,8 @@
     $navigation = [
         ['label' => 'Dashboard', 'route' => 'kasir.dashboard', 'active' => 'kasir.dashboard', 'icon' => 'grid'],
         ['section' => 'Operasional'],
-        ['label' => 'Transaksi Penjualan', 'icon' => 'receipt', 'disabled' => true, 'badge' => 'Segera'],
-        ['label' => 'Retur Penjualan', 'icon' => 'rotate', 'disabled' => true, 'badge' => 'Segera'],
-        ['label' => 'Riwayat Transaksi', 'icon' => 'clock', 'disabled' => true, 'badge' => 'Segera'],
+        ['label' => 'Transaksi Penjualan', 'route' => 'kasir.penjualan.create', 'active' => 'kasir.penjualan.create', 'icon' => 'receipt'],
+        ['label' => 'Riwayat Transaksi', 'route' => 'kasir.penjualan.index', 'active' => 'kasir.penjualan.index', 'icon' => 'clock'],
     ];
 @endphp
 

@@ -91,7 +91,10 @@
                                     <form
                                         action="{{ route('admin.vendor.destroy', $vendor->id) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus vendor ini?')"
+                                        data-confirm="Data vendor yang dihapus tidak dapat dikembalikan."
+                                        data-confirm-title="Hapus Vendor?"
+                                        data-confirm-label="Ya, Hapus"
+                                        data-confirm-variant="danger"
                                     >
                                         @csrf
                                         @method('DELETE')

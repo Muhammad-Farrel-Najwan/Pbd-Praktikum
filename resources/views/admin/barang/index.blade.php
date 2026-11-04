@@ -40,6 +40,7 @@
                         <th scope="col">Nama Barang</th>
                         <th scope="col">Satuan</th>
                         <th scope="col" class="is-right">Harga</th>
+                        <th scope="col">Stok</th>
                         <th scope="col">Status</th>
                         <th scope="col">Aksi</th>
                     </tr>
@@ -71,6 +72,14 @@
                             </td>
 
                             <td>
+                                @if ((int) $barang->stok > 0)
+                                    <span class="rs-chip">{{ (int) $barang->stok }}</span>
+                                @else
+                                    <span class="rs-cell-muted">0</span>
+                                @endif
+                            </td>
+
+                            <td>
                                 @if ($barang->status_barang === 'Aktif')
                                     <x-ui.badge variant="success" dot>Aktif</x-ui.badge>
                                 @else
@@ -91,7 +100,10 @@
                                     <form
                                         action="{{ route('admin.barang.destroy', $barang->id) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus barang ini?')"
+                                        data-confirm="Data barang yang dihapus tidak dapat dikembalikan."
+                                        data-confirm-title="Hapus Barang?"
+                                        data-confirm-label="Ya, Hapus"
+                                        data-confirm-variant="danger"
                                     >
                                         @csrf
                                         @method('DELETE')
@@ -105,7 +117,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7">
+                            <td colspan="8">
                                 <x-ui.empty-state icon="box" title="Belum ada data barang"
                                     description="Tambahkan barang pertama melalui tombol Tambah Barang." />
                             </td>
@@ -113,7 +125,7 @@
                     @endforelse
 
                     <tr data-table-search-empty hidden>
-                        <td colspan="7">
+                        <td colspan="8">
                             <x-ui.empty-state icon="search" title="Barang tidak ditemukan"
                                 description="Coba kata kunci lain atau bersihkan pencarian." />
                         </td>

@@ -67,7 +67,10 @@
                                     </x-ui.button>
 
                                     <form action="{{ route('admin.satuan.destroy', $item->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus satuan ini?')">
+                                        data-confirm="Data satuan yang dihapus tidak dapat dikembalikan."
+                                        data-confirm-title="Hapus Satuan?"
+                                        data-confirm-label="Ya, Hapus"
+                                        data-confirm-variant="danger">
                                         @csrf
                                         @method('DELETE')
 

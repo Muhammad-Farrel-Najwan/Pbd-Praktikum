@@ -1,9 +1,19 @@
 <?php
 
-use App\Http\Controllers\adminController;
+use App\Http\Controllers\Admin\BarangController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PenerimaanController;
+use App\Http\Controllers\Admin\PengadaanController;
+use App\Http\Controllers\Admin\PenjualanController as AdminPenjualanController;
+use App\Http\Controllers\Admin\ReturController;
+use App\Http\Controllers\Admin\SatuanController;
+use App\Http\Controllers\Admin\StokController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\gudangController;
-use App\Http\Controllers\kasirController;
+use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
+use App\Http\Controllers\Kasir\PenjualanController as KasirPenjualanController;
 use App\Http\Controllers\managerController;
 use App\Http\Controllers\penjualanController;
 use App\Http\Middleware\AuthMiddleware;
@@ -29,76 +39,120 @@ Route::middleware([AuthMiddleware::class])->group(function () {
         ->prefix('dashboard/admin')
         ->as('admin.')
         ->group(function () {
-            Route::get('/', [adminController::class, 'index'])
+            Route::get('/', [DashboardController::class, 'index'])
                 ->name('dashboard');
-            Route::post('/margin', [adminController::class, 'updateMargin'])
+            Route::post('/margin', [DashboardController::class, 'updateMargin'])
                 ->name('dashboard.margin.update');
 
             // Route Barang
-            Route::get('/barang', [adminController::class, 'dataBarang'])
+            Route::get('/barang', [BarangController::class, 'dataBarang'])
                 ->name('dashboard.barang');
-            Route::get('/barang/tambah', [adminController::class, 'createBarang'])
+            Route::get('/barang/tambah', [BarangController::class, 'createBarang'])
                 ->name('barang.create');
-            Route::post('/barang', [adminController::class, 'storeBarang'])
+            Route::post('/barang', [BarangController::class, 'storeBarang'])
                 ->name('barang.store');
-            Route::get('/barang/{id}/edit', [adminController::class, 'editBarang'])
+            Route::get('/barang/{id}/edit', [BarangController::class, 'editBarang'])
                 ->name('barang.edit');
-            Route::put('barang/{id}', [adminController::class, 'updateBarang'])
+            Route::put('barang/{id}', [BarangController::class, 'updateBarang'])
                 ->name('barang.update');
-            Route::delete('barang/{id}', [adminController::class, 'destroyBarang'])
+            Route::delete('barang/{id}', [BarangController::class, 'destroyBarang'])
                 ->name('barang.destroy');
 
             // route satuan
-            Route::get('/satuan', [adminController::class, 'dataSatuan'])
+            Route::get('/satuan', [SatuanController::class, 'dataSatuan'])
                 ->name('dashboard.satuan');
-            Route::get('/satuan/tambah', [adminController::class, 'createSatuan'])
+            Route::get('/satuan/tambah', [SatuanController::class, 'createSatuan'])
                 ->name('satuan.create');
-            Route::post('/satuan', [adminController::class, 'storeSatuan'])
+            Route::post('/satuan', [SatuanController::class, 'storeSatuan'])
                 ->name('satuan.store');
-            Route::get('/satuan/{id}/edit', [adminController::class, 'editSatuan'])
+            Route::get('/satuan/{id}/edit', [SatuanController::class, 'editSatuan'])
                 ->name('satuan.edit');
-            Route::put('/satuan/{id}', [adminController::class, 'updateSatuan'])
+            Route::put('/satuan/{id}', [SatuanController::class, 'updateSatuan'])
                 ->name('satuan.update');
-            Route::delete('satuan/{id}', [adminController::class, 'destroySatuan'])
+            Route::delete('satuan/{id}', [SatuanController::class, 'destroySatuan'])
                 ->name('satuan.destroy');
 
             // route vendor
-            Route::get('/vendor', [adminController::class, 'dataVendor'])
+            Route::get('/vendor', [VendorController::class, 'dataVendor'])
                 ->name('dashboard.vendor');
-            Route::get('/vendor/tambah', [adminController::class, 'createVendor'])
+            Route::get('/vendor/tambah', [VendorController::class, 'createVendor'])
                 ->name('vendor.create');
-            Route::post('/vendor', [adminController::class, 'storeVendor'])
+            Route::post('/vendor', [VendorController::class, 'storeVendor'])
                 ->name('vendor.store');
-            Route::get('/vendor/{id}/edit', [adminController::class, 'editVendor'])
+            Route::get('/vendor/{id}/edit', [VendorController::class, 'editVendor'])
                 ->name('vendor.edit');
-            Route::put('/vendor/{id}', [adminController::class, 'updateVendor'])
+            Route::put('/vendor/{id}', [VendorController::class, 'updateVendor'])
                 ->name('vendor.update');
-            Route::delete('/vendor/{id}', [adminController::class, 'destroyVendor'])
+            Route::delete('/vendor/{id}', [VendorController::class, 'destroyVendor'])
                 ->name('vendor.destroy');
 
+            // stok route
+            Route::get('/stok', [StokController::class, 'dataStok'])
+                ->name('dashboard.stok');
+            Route::get('/stok/{id}', [StokController::class, 'detailStok'])
+                ->name('stok.detail');
+
             // user route
-            Route::get('/user', [adminController::class, 'dataUser'])
+            Route::get('/user', [UserController::class, 'dataUser'])
                 ->name('dashboard.user');
-            Route::get('/user/tambah', [adminController::class, 'createUser'])
+            Route::get('/user/tambah', [UserController::class, 'createUser'])
                 ->name('user.create');
-            Route::post('/user', [adminController::class, 'storeUser'])
+            Route::post('/user', [UserController::class, 'storeUser'])
                 ->name('user.store');
-            Route::get('/user/{id}/edit', [adminController::class, 'editUser'])
+            Route::get('/user/{id}/edit', [UserController::class, 'editUser'])
                 ->name('user.edit');
-            Route::put('/user/{id}', [adminController::class, 'updateUser'])
+            Route::put('/user/{id}', [UserController::class, 'updateUser'])
                 ->name('user.update');
-            Route::delete('/user/{id}', [adminController::class, 'destroyUser'])
+            Route::delete('/user/{id}', [UserController::class, 'destroyUser'])
                 ->name('user.destroy');
 
             // pengadaan route
-            Route::get('/pengadaan', [adminController::class, 'dataPengadaan'])
+            Route::get('/pengadaan', [PengadaanController::class, 'dataPengadaan'])
                 ->name('dashboard.pengadaan');
-            Route::get('/pengadaan/tambah', [adminController::class, 'createPengadaan'])
+            Route::get('/pengadaan/tambah', [PengadaanController::class, 'createPengadaan'])
                 ->name('pengadaan.create');
-            Route::post('/pengadaan', [adminController::class, 'storePengadaan'])
+            Route::post('/pengadaan', [PengadaanController::class, 'storePengadaan'])
                 ->name('pengadaan.store');
-            Route::get('/pengadaan/{id}', [adminController::class, 'detailPengadaan'])
+            Route::get('/pengadaan/{id}', [PengadaanController::class, 'detailPengadaan'])
                 ->name('pengadaan.detail');
+
+            // penerimaan route
+            Route::get('/penerimaan', [PenerimaanController::class, 'dataPenerimaan'])
+                ->name('dashboard.penerimaan');
+            Route::get('/penerimaan/tambah', [PenerimaanController::class, 'createPenerimaan'])
+                ->name('penerimaan.create');
+            Route::post('/penerimaan', [PenerimaanController::class, 'storePenerimaan'])
+                ->name('penerimaan.store');
+            Route::get('/penerimaan/{id}', [PenerimaanController::class, 'detailPenerimaan'])
+                ->name('penerimaan.detail');
+
+            // retur route
+            Route::get('/retur', [ReturController::class, 'dataRetur'])
+                ->name('dashboard.retur');
+
+            Route::get('/retur/tambah', [ReturController::class, 'createRetur'])
+                ->name('retur.create');
+
+            Route::post('/retur', [ReturController::class, 'storeRetur'])
+                ->name('retur.store');
+
+            Route::get('/retur/{id}', [ReturController::class, 'detailRetur'])
+                ->name('retur.detail');
+
+            Route::post('/retur/{id}/proses', [ReturController::class, 'prosesRetur'])
+                ->name('retur.proses');
+
+            // penjualan route
+            Route::get('/penjualan', [AdminPenjualanController::class, 'dataPenjualan'])
+                ->name('penjualan.index');
+            Route::get('/penjualan/create', [AdminPenjualanController::class, 'createPenjualan'])
+                ->name('penjualan.create');
+            Route::post('/penjualan', [AdminPenjualanController::class, 'storePenjualan'])
+                ->name('penjualan.store');
+            Route::get('/penjualan/{id}/struk', [AdminPenjualanController::class, 'strukPenjualan'])
+                ->name('penjualan.struk');
+            Route::get('/penjualan/{id}', [AdminPenjualanController::class, 'detailPenjualan'])
+                ->name('penjualan.detail');
         });
 
     // Kasir Route
@@ -106,12 +160,14 @@ Route::middleware([AuthMiddleware::class])->group(function () {
         ->prefix('dashboard/kasir')
         ->as('kasir.')
         ->group(function () {
-            Route::get('/', [kasirController::class, 'index'])->name('dashboard');
+            Route::get('/', [KasirDashboardController::class, 'index'])->name('dashboard');
 
             // Penjualan
-            Route::get('/penjualan', [kasirController::class, 'dataPenjualan'])->name('penjualan.index');
-            Route::get('/penjualan/create', [kasirController::class, 'createPenjualan'])->name('penjualan.create');
-            Route::post('/penjualan', [kasirController::class, 'storePenjualan'])->name('penjualan.store');
+            Route::get('/penjualan', [KasirPenjualanController::class, 'dataPenjualan'])->name('penjualan.index');
+            Route::get('/penjualan/create', [KasirPenjualanController::class, 'createPenjualan'])->name('penjualan.create');
+            Route::post('/penjualan', [KasirPenjualanController::class, 'storePenjualan'])->name('penjualan.store');
+            Route::get('/penjualan/{id}/struk', [KasirPenjualanController::class, 'strukPenjualan'])->name('penjualan.struk');
+            Route::get('/penjualan/{id}', [KasirPenjualanController::class, 'detailPenjualan'])->name('penjualan.detail');
         });
 
     // Manager Route

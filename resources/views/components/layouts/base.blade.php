@@ -56,7 +56,14 @@
     <div class="rs-app">
         <aside class="rs-sidebar" id="rs-sidebar" aria-label="Navigasi {{ $roleLabel }}">
             <a href="{{ route($homeRoute) }}" class="rs-brand" aria-label="RedStock, menuju dashboard {{ $roleLabel }}">
-                <span class="rs-brand-mark" aria-hidden="true">R</span>
+                <img
+                    src="{{ asset('images/logo-mu.svg') }}"
+                    alt=""
+                    class="rs-brand-logo"
+                    width="44"
+                    height="44"
+                    aria-hidden="true"
+                >
 
                 <span class="rs-brand-text">
                     <span class="rs-brand-name">RED<span>STOCK</span></span>
@@ -122,7 +129,14 @@
                     </span>
                 </div>
 
-                <form method="POST" action="{{ route('logout') }}">
+                <form
+                    method="POST"
+                    action="{{ route('logout') }}"
+                    data-confirm="Kamu perlu login lagi untuk mengakses panel ini."
+                    data-confirm-title="Keluar dari RedStock?"
+                    data-confirm-label="Ya, Keluar"
+                    data-confirm-variant="danger"
+                >
                     @csrf
 
                     <button type="submit" class="rs-logout">
@@ -157,6 +171,11 @@
                 </div>
 
                 <div class="rs-topbar-right">
+                    <x-ui.notification-center
+                        :groups="$notificationGroups ?? []"
+                        :enabled="$notificationsEnabled ?? false"
+                    />
+
                     <span class="rs-status-chip">
                         <span class="rs-status-dot" aria-hidden="true"></span>
                         System Online
@@ -178,6 +197,8 @@
             </main>
         </div>
     </div>
+
+    <x-ui.confirm-dialog />
 
     @stack('scripts')
 </body>

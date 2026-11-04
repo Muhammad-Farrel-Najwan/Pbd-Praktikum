@@ -1,4 +1,3 @@
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -22,7 +21,7 @@ CREATE TABLE `barang` (
   PRIMARY KEY (`idbarang`),
   KEY `fk_barang_satuan_idx` (`satuan_idsatuan`),
   CONSTRAINT `fk_barang_satuan` FOREIGN KEY (`satuan_idsatuan`) REFERENCES `satuan` (`idsatuan`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `detail_penerimaan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -39,7 +38,7 @@ CREATE TABLE `detail_penerimaan` (
   KEY `fk_detail_penerimaan_penerimaan1_idx` (`penerimaan_idpenerimaan`),
   CONSTRAINT `fk_detail_penerimaan_barang1` FOREIGN KEY (`barang_idbarang`) REFERENCES `barang` (`idbarang`),
   CONSTRAINT `fk_detail_penerimaan_penerimaan1` FOREIGN KEY (`penerimaan_idpenerimaan`) REFERENCES `penerimaan` (`idpenerimaan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `detail_pengadaan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -56,7 +55,7 @@ CREATE TABLE `detail_pengadaan` (
   KEY `fk_detail_pengadaan_pengadaan1_idx` (`pengadaan_idpengadaan`),
   CONSTRAINT `fk_detail_pengadaan_barang1` FOREIGN KEY (`barang_idbarang`) REFERENCES `barang` (`idbarang`),
   CONSTRAINT `fk_detail_pengadaan_pengadaan1` FOREIGN KEY (`pengadaan_idpengadaan`) REFERENCES `pengadaan` (`idpengadaan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `detail_penjualan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -89,7 +88,7 @@ CREATE TABLE `detail_retur` (
   KEY `fk_detail_retur_retur1_idx` (`retur_idretur`),
   CONSTRAINT `fk_detail_retur_detail_penerimaan1` FOREIGN KEY (`detail_penerimaan_iddetail_penerimaan`) REFERENCES `detail_penerimaan` (`iddetail_penerimaan`),
   CONSTRAINT `fk_detail_retur_retur1` FOREIGN KEY (`retur_idretur`) REFERENCES `retur` (`idretur`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `kartu_stok`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -106,8 +105,39 @@ CREATE TABLE `kartu_stok` (
   PRIMARY KEY (`idkartu_stok`),
   KEY `fk_kartu_stok_barang1_idx` (`barang_idbarang`),
   CONSTRAINT `fk_kartu_stok_barang1` FOREIGN KEY (`barang_idbarang`) REFERENCES `barang` (`idbarang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_hitung_stok_otomatis` BEFORE INSERT ON `kartu_stok` FOR EACH ROW BEGIN
+    DECLARE v_saldo INT DEFAULT 0;
+
+    SELECT COALESCE(SUM(COALESCE(masuk, 0) - COALESCE(keluar, 0)), 0)
+    INTO v_saldo
+    FROM kartu_stok
+    WHERE barang_idbarang = NEW.barang_idbarang;
+
+    SET NEW.stock = v_saldo
+        + COALESCE(NEW.masuk, 0)
+        - COALESCE(NEW.keluar, 0);
+
+    IF NEW.stock < 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Stok tidak mencukupi untuk transaksi ini';
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 DROP TABLE IF EXISTS `margin_penjualan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -137,8 +167,53 @@ CREATE TABLE `penerimaan` (
   KEY `fk_penerimaan_user1_idx` (`user_iduser`),
   CONSTRAINT `fk_penerimaan_pengadaan1` FOREIGN KEY (`pengadaan_idpengadaan`) REFERENCES `pengadaan` (`idpengadaan`),
   CONSTRAINT `fk_penerimaan_user1` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_penerimaan_selesai_stok` AFTER UPDATE ON `penerimaan` FOR EACH ROW BEGIN
+    IF OLD.status <> 'S' AND NEW.status = 'S' THEN
+        INSERT INTO kartu_stok (
+            jenis_transaksi,
+            masuk,
+            keluar,
+            stock,
+            created_at,
+            idtransaksi,
+            barang_idbarang
+        )
+        SELECT
+            'P',
+            SUM(dp.jumlah_terima),
+            0,
+            NULL,
+            NOW(),
+            NEW.idpenerimaan,
+            dp.barang_idbarang
+        FROM detail_penerimaan dp
+        WHERE dp.penerimaan_idpenerimaan = NEW.idpenerimaan
+          AND NOT EXISTS (
+              SELECT 1
+              FROM kartu_stok ks
+              WHERE ks.idtransaksi = NEW.idpenerimaan
+                AND ks.barang_idbarang = dp.barang_idbarang
+                AND ks.jenis_transaksi = 'P'
+          )
+        GROUP BY dp.barang_idbarang;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 DROP TABLE IF EXISTS `pengadaan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -156,7 +231,7 @@ CREATE TABLE `pengadaan` (
   KEY `fk_pengadaan_user1_idx` (`user_iduser`),
   CONSTRAINT `fk_pengadaan_user1` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`),
   CONSTRAINT `fk_pengadaan_vendor1` FOREIGN KEY (`vendor_idvendor`) REFERENCES `vendor` (`idvendor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `penjualan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -169,6 +244,7 @@ CREATE TABLE `penjualan` (
   `total_nilai` int DEFAULT NULL,
   `user_iduser` int NOT NULL,
   `margin_penjualan_idmargin_penjualan` int NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'P',
   PRIMARY KEY (`idpenjualan`),
   KEY `fk_penjualan_user1_idx` (`user_iduser`),
   KEY `fk_penjualan_margin_penjualan1_idx` (`margin_penjualan_idmargin_penjualan`),
@@ -176,6 +252,51 @@ CREATE TABLE `penjualan` (
   CONSTRAINT `fk_penjualan_user1` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_penjualan_selesai_stok` AFTER UPDATE ON `penjualan` FOR EACH ROW BEGIN
+    IF OLD.status <> 'S' AND NEW.status = 'S' THEN
+        INSERT INTO kartu_stok (
+            jenis_transaksi,
+            masuk,
+            keluar,
+            stock,
+            created_at,
+            idtransaksi,
+            barang_idbarang
+        )
+        SELECT
+            'J',
+            0,
+            SUM(dp.jumlah),
+            NULL,
+            NOW(),
+            NEW.idpenjualan,
+            dp.barang_idbarang
+        FROM detail_penjualan dp
+        WHERE dp.penjualan_idpenjualan = NEW.idpenjualan
+          AND NOT EXISTS (
+              SELECT 1
+              FROM kartu_stok ks
+              WHERE ks.idtransaksi = NEW.idpenjualan
+                AND ks.barang_idbarang = dp.barang_idbarang
+                AND ks.jenis_transaksi = 'J'
+          )
+        GROUP BY dp.barang_idbarang;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 DROP TABLE IF EXISTS `retur`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -184,13 +305,62 @@ CREATE TABLE `retur` (
   `created_at` timestamp NULL DEFAULT NULL,
   `penerimaan_idpenerimaan` bigint NOT NULL,
   `user_iduser` int NOT NULL,
+  `status` char(1) NOT NULL DEFAULT 'P',
   PRIMARY KEY (`idretur`),
   KEY `fk_retur_penerimaan1_idx` (`penerimaan_idpenerimaan`),
   KEY `fk_retur_user1_idx` (`user_iduser`),
   CONSTRAINT `fk_retur_penerimaan1` FOREIGN KEY (`penerimaan_idpenerimaan`) REFERENCES `penerimaan` (`idpenerimaan`),
   CONSTRAINT `fk_retur_user1` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_retur_selesai_stok` AFTER UPDATE ON `retur` FOR EACH ROW BEGIN
+    IF OLD.status <> 'S' AND NEW.status = 'S' THEN
+        INSERT INTO kartu_stok (
+            jenis_transaksi,
+            masuk,
+            keluar,
+            stock,
+            created_at,
+            idtransaksi,
+            barang_idbarang
+        )
+        SELECT
+            'R',
+            0,
+            SUM(dr.jumlah),
+            NULL,
+            NOW(),
+            NEW.idretur,
+            dp.barang_idbarang
+        FROM detail_retur dr
+        JOIN detail_penerimaan dp
+            ON dp.iddetail_penerimaan =
+               dr.detail_penerimaan_iddetail_penerimaan
+        WHERE dr.retur_idretur = NEW.idretur
+          AND NOT EXISTS (
+              SELECT 1
+              FROM kartu_stok ks
+              WHERE ks.idtransaksi = NEW.idretur
+                AND ks.barang_idbarang = dp.barang_idbarang
+                AND ks.jenis_transaksi = 'R'
+          )
+        GROUP BY dp.barang_idbarang;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -208,7 +378,7 @@ CREATE TABLE `satuan` (
   `nama_satuan` varchar(45) NOT NULL,
   `status` tinyint NOT NULL,
   PRIMARY KEY (`idsatuan`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -222,7 +392,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_username_unique` (`username`),
   KEY `fk_user_role1_idx` (`role_idrole`),
   CONSTRAINT `fk_user_role1` FOREIGN KEY (`role_idrole`) REFERENCES `role` (`idrole`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `vendor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -233,7 +403,7 @@ CREATE TABLE `vendor` (
   `badan_hukum` char(1) NOT NULL,
   `status` char(1) NOT NULL,
   PRIMARY KEY (`idvendor`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `view_barang`;
 /*!50001 DROP VIEW IF EXISTS `view_barang`*/;
@@ -295,6 +465,41 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `jenis_badan_usaha`,
  1 AS `status_vendor`*/;
 SET character_set_client = @saved_cs_client;
+/*!50003 DROP FUNCTION IF EXISTS `fn_hitung_harga_jual` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `fn_hitung_harga_jual`(
+    p_harga INT
+) RETURNS decimal(15,2)
+    READS SQL DATA
+BEGIN
+    DECLARE v_margin DECIMAL(5,2) DEFAULT NULL;
+
+    SELECT persen
+    INTO v_margin
+    FROM margin_penjualan
+    WHERE status = 1
+    LIMIT 1;
+
+    IF v_margin IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Margin penjualan aktif tidak ditemukan';
+    END IF;
+
+    RETURN ROUND(p_harga + (p_harga * v_margin / 100), 0);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_aktifkan_margin` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -359,6 +564,210 @@ BEGIN
     WHERE idmargin_penjualan = p_idmargin_penjualan;
 
     COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_proses_retur` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_proses_retur`(
+    IN p_idretur BIGINT
+)
+BEGIN
+    DECLARE v_idpenerimaan BIGINT;
+    DECLARE v_status CHAR(1);
+    DECLARE v_jumlah INT DEFAULT 0;
+    DECLARE v_invalid INT DEFAULT 0;
+
+    -- Memastikan retur tersedia
+    SELECT penerimaan_idpenerimaan, status
+    INTO v_idpenerimaan, v_status
+    FROM retur
+    WHERE idretur = p_idretur
+    FOR UPDATE;
+
+    -- Retur sudah selesai
+    IF v_status = 'S' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Retur sudah selesai diproses';
+    END IF;
+
+    -- Memastikan penerimaan sudah selesai
+    IF NOT EXISTS (
+        SELECT 1
+        FROM penerimaan
+        WHERE idpenerimaan = v_idpenerimaan
+          AND status = 'S'
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Penerimaan belum selesai';
+    END IF;
+
+    -- Memastikan detail retur tersedia
+    SELECT COUNT(*)
+    INTO v_jumlah
+    FROM detail_retur
+    WHERE retur_idretur = p_idretur;
+
+    IF v_jumlah = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Detail retur belum tersedia';
+    END IF;
+
+    -- Validasi detail, jumlah, dan batas penerimaan
+    SELECT COUNT(*)
+    INTO v_invalid
+    FROM detail_retur dr
+    JOIN detail_penerimaan dp
+        ON dp.iddetail_penerimaan =
+           dr.detail_penerimaan_iddetail_penerimaan
+    WHERE dr.retur_idretur = p_idretur
+      AND (
+          dr.jumlah IS NULL
+          OR dr.jumlah <= 0
+          OR dp.penerimaan_idpenerimaan <> v_idpenerimaan
+          OR (
+              SELECT COALESCE(SUM(dr2.jumlah), 0)
+              FROM detail_retur dr2
+              WHERE dr2.detail_penerimaan_iddetail_penerimaan =
+                    dp.iddetail_penerimaan
+          ) > dp.jumlah_terima
+      );
+
+    IF v_invalid > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Jumlah retur tidak valid atau melebihi jumlah penerimaan';
+    END IF;
+
+    -- Validasi stok berdasarkan saldo ledger kartu_stok (masuk - keluar)
+    SELECT COUNT(*)
+    INTO v_invalid
+    FROM (
+        SELECT
+            dp.barang_idbarang,
+            SUM(dr.jumlah) AS total_retur,
+            COALESCE((
+                SELECT SUM(COALESCE(ks.masuk, 0) - COALESCE(ks.keluar, 0))
+                FROM kartu_stok ks
+                WHERE ks.barang_idbarang = dp.barang_idbarang
+            ), 0) AS stok_tersedia
+        FROM detail_retur dr
+        JOIN detail_penerimaan dp
+            ON dp.iddetail_penerimaan =
+               dr.detail_penerimaan_iddetail_penerimaan
+        WHERE dr.retur_idretur = p_idretur
+        GROUP BY dp.barang_idbarang
+    ) AS validasi_stok
+    WHERE total_retur > stok_tersedia;
+
+    IF v_invalid > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Stok tidak mencukupi untuk melakukan retur';
+    END IF;
+
+    -- Menyelesaikan retur.
+    -- Trigger trg_retur_selesai_stok akan mencatat barang keluar ke kartu_stok.
+    UPDATE retur
+    SET status = 'S'
+    WHERE idretur = p_idretur;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_selesai_penjualan` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_selesai_penjualan`(
+    IN p_idpenjualan INT
+)
+BEGIN
+    DECLARE v_status CHAR(1) DEFAULT NULL;
+    DECLARE v_jumlah_detail INT DEFAULT 0;
+    DECLARE v_invalid INT DEFAULT 0;
+
+    SELECT status
+    INTO v_status
+    FROM penjualan
+    WHERE idpenjualan = p_idpenjualan
+    FOR UPDATE;
+
+    IF v_status IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Penjualan tidak ditemukan';
+    END IF;
+
+    IF v_status <> 'P' THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Penjualan tidak dalam status pending';
+    END IF;
+
+    SELECT COUNT(*)
+    INTO v_jumlah_detail
+    FROM detail_penjualan
+    WHERE penjualan_idpenjualan = p_idpenjualan;
+
+    IF v_jumlah_detail = 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Detail penjualan belum tersedia';
+    END IF;
+
+    SELECT COUNT(*)
+    INTO v_invalid
+    FROM detail_penjualan
+    WHERE penjualan_idpenjualan = p_idpenjualan
+      AND (jumlah IS NULL OR jumlah <= 0);
+
+    IF v_invalid > 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Jumlah barang tidak valid';
+    END IF;
+
+    SELECT COUNT(*)
+    INTO v_invalid
+    FROM (
+        SELECT
+            dp.barang_idbarang,
+            SUM(dp.jumlah) AS butuh,
+            COALESCE((
+                SELECT SUM(COALESCE(ks.masuk, 0) - COALESCE(ks.keluar, 0))
+                FROM kartu_stok ks
+                WHERE ks.barang_idbarang = dp.barang_idbarang
+            ), 0) AS saldo
+        FROM detail_penjualan dp
+        WHERE dp.penjualan_idpenjualan = p_idpenjualan
+        GROUP BY dp.barang_idbarang
+    ) AS validasi_stok
+    WHERE validasi_stok.butuh > validasi_stok.saldo;
+
+    IF v_invalid > 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Stok tidak mencukupi untuk melakukan penjualan';
+    END IF;
+
+    -- Trigger trg_penjualan_selesai_stok akan mencatat stok keluar jenis 'J'.
+    UPDATE penjualan
+    SET status = 'S'
+    WHERE idpenjualan = p_idpenjualan;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;

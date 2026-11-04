@@ -101,7 +101,10 @@
                                         <form
                                             action="{{ route('admin.user.destroy', $user->id) }}"
                                             method="POST"
-                                            onsubmit="return confirm('Yakin ingin menghapus user ini?')"
+                                            data-confirm="Akun user yang dihapus tidak dapat dikembalikan."
+                                            data-confirm-title="Hapus User?"
+                                            data-confirm-label="Ya, Hapus"
+                                            data-confirm-variant="danger"
                                         >
                                             @csrf
                                             @method('DELETE')

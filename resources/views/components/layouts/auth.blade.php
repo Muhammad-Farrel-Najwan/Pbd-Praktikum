@@ -36,7 +36,14 @@
             </div>
 
             <div class="rs-auth-brand">
-                <span class="rs-brand-mark" aria-hidden="true">R</span>
+                <img
+                    src="{{ asset('images/logo-mu.svg') }}"
+                    alt=""
+                    class="rs-brand-logo"
+                    width="44"
+                    height="44"
+                    aria-hidden="true"
+                >
 
                 <span class="rs-brand-text">
                     <span class="rs-brand-name">RED<span>STOCK</span></span>
