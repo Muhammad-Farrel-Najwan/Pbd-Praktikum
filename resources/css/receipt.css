@@ -1,0 +1,221 @@
+/* ==================== RECEIPT (STRUK) ==================== */
+
+/*
+ * Standalone stylesheet for the print-ready receipt pages.
+ * Served through @vite so it works on both admin and kasir struk views.
+ *
+ * The paper itself stays white on purpose — this must stay readable when
+ * printed on an 80mm thermal roll. Only the surrounding chrome is themed.
+ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Chakra Petch', ui-sans-serif, system-ui, 'Segoe UI', Arial, sans-serif;
+    background:
+        radial-gradient(ellipse 70% 50% at 82% -10%, rgba(218, 2, 14, 0.22), transparent 60%),
+        linear-gradient(180deg, #05070b 0%, #070a11 48%, #04060a 100%);
+    color: #111827;
+    padding: 24px 16px;
+    min-height: 100vh;
+}
+
+.rs-print-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.rs-print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ff2233, #b3010b);
+    color: #ffffff;
+    box-shadow: 0 14px 30px -18px rgba(218, 2, 14, 0.95);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.rs-print-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 38px -18px rgba(218, 2, 14, 1);
+}
+
+.rs-print-btn.is-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: none;
+}
+
+.rs-receipt {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 22px 18px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.rs-receipt-head {
+    text-align: center;
+    margin-bottom: 4px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #da020e;
+}
+
+.rs-receipt-logo {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 6px;
+}
+
+.rs-receipt-brand {
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #111827;
+}
+
+.rs-receipt-sub {
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.rs-receipt hr {
+    border: none;
+    border-top: 1px dashed #9ca3af;
+    margin: 12px 0;
+}
+
+.rs-receipt-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.rs-receipt-meta .rs-receipt-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.rs-receipt-meta .rs-receipt-label {
+    color: #6b7280;
+}
+
+.rs-receipt-meta .rs-receipt-value {
+    font-weight: 600;
+    text-align: right;
+}
+
+.rs-receipt table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rs-receipt td {
+    padding: 5px 0;
+    vertical-align: top;
+    font-size: 12px;
+}
+
+.rs-receipt .rs-receipt-item-name {
+    font-weight: 600;
+}
+
+.rs-receipt .rs-receipt-item-detail {
+    color: #6b7280;
+    font-size: 11px;
+}
+
+.rs-receipt .rs-receipt-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.rs-receipt-totals {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.rs-receipt-totals .rs-receipt-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.rs-receipt-totals .rs-receipt-row.is-total {
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 2px solid #111827;
+    font-size: 16px;
+    font-weight: 800;
+    color: #da020e;
+}
+
+.rs-receipt-foot {
+    text-align: center;
+    color: #6b7280;
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+.rs-receipt-foot .rs-receipt-thanks {
+    color: #111827;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+@media print {
+    @page {
+        size: 80mm auto;
+        margin: 4mm;
+    }
+
+    body {
+        background: #ffffff;
+        padding: 0;
+        min-height: auto;
+    }
+
+    .rs-print-actions {
+        display: none;
+    }
+
+    .rs-receipt {
+        max-width: none;
+        width: 72mm;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}

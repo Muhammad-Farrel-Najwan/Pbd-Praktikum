@@ -1,0 +1,169 @@
+/* ==========================================================================
+   DESIGN TOKENS — "RED DEVIL FUTURISM"
+   Manchester United inspired palette + futuristic interface language.
+   All legacy --rs-* names are preserved so existing components keep working.
+   ========================================================================== */
+
+:root {
+    /* ---------- Manchester United core palette ---------- */
+    --mu-red: #da020e;
+    --mu-red-bright: #ff2233;
+    --mu-red-deep: #8b0108;
+    --mu-red-dark: #4a0106;
+    --mu-gold: #fbe122;
+    --mu-gold-deep: #c9b31a;
+    --mu-black: #05070b;
+    --mu-black-soft: #080c13;
+    --mu-ink: #0b0f17;
+
+    /* ---------- Surfaces ---------- */
+    --rs-bg: var(--mu-black);
+    --rs-bg-soft: var(--mu-black-soft);
+    --rs-surface: rgba(11, 15, 23, 0.82);
+    --rs-surface-solid: var(--mu-ink);
+    --rs-surface-raised: #111726;
+    --rs-surface-glass: rgba(17, 23, 38, 0.62);
+
+    /* ---------- Borders ---------- */
+    --rs-border: rgba(255, 255, 255, 0.08);
+    --rs-border-strong: rgba(255, 255, 255, 0.16);
+    --rs-border-accent: rgba(218, 2, 14, 0.38);
+
+    /* ---------- Brand red ---------- */
+    --rs-red: var(--mu-red);
+    --rs-red-strong: #b3010b;
+    --rs-red-soft: rgba(218, 2, 14, 0.13);
+    --rs-red-glow: rgba(218, 2, 14, 0.45);
+    --rs-red-hairline: rgba(218, 2, 14, 0.22);
+
+    /* ---------- Text ---------- */
+    --rs-text: #f7f9fc;
+    --rs-text-soft: #c8d3e2;
+    --rs-muted: #8d9cb3;
+    --rs-muted-dim: #5d6b80;
+
+    /* ---------- Semantic ---------- */
+    --rs-success: #22c55e;
+    --rs-warning: var(--mu-gold);
+    --rs-danger: #ff4257;
+    --rs-info: #38bdf8;
+
+    /* ---------- Semantic text shades ---------- */
+    --rs-white: #ffffff;
+    --rs-success-soft: #86efac;
+    --rs-success-soft-2: #bbf7d0;
+    --rs-danger-soft: #ffb3bb;
+    --rs-danger-soft-2: #fecdd3;
+    --rs-danger-soft-3: #fca5a5;
+    --rs-danger-glow: #ff8a96;
+    --rs-info-soft: #7dd3fc;
+    --rs-info-soft-2: #bae6fd;
+    --rs-gold-soft: #fffbe0;
+
+    /* ---------- Extra tone accents ---------- */
+    --rs-amber: #f59e0b;
+    --rs-violet-soft: #c084fc;
+    --rs-rose-soft: #fb7185;
+
+    /* ---------- Neutral scale (legacy slate aliases) ---------- */
+    --rs-slate-100: #f1f5f9;
+    --rs-slate-300: #526078;
+    --rs-slate-400: #cbd5e1;
+    --rs-slate-500: #475569;
+    --rs-slate-700: #334155;
+    --rs-slate-800: #1e293b;
+
+    /* ---------- Background depth ---------- */
+    --rs-bg-deep: #04060a;
+    --rs-bg-mid: #070a11;
+
+    /* ---------- Accent (overridden per role) ---------- */
+    --rs-accent: var(--rs-red);
+    --rs-accent-soft: var(--rs-red-soft);
+    --rs-accent-glow: var(--rs-red-glow);
+
+    /* ---------- Radii ---------- */
+    --rs-radius-xs: 6px;
+    --rs-radius-sm: 10px;
+    --rs-radius: 14px;
+    --rs-radius-lg: 20px;
+    --rs-radius-xl: 28px;
+    --rs-radius-pill: 999px;
+
+    /* ---------- Shadows ---------- */
+    --rs-shadow-panel: 0 24px 60px -30px rgba(0, 0, 0, 0.9);
+    --rs-shadow-glow: 0 0 32px -8px var(--rs-accent-glow);
+    --rs-shadow-glow-strong: 0 0 48px -10px var(--rs-accent-glow);
+    --rs-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    /* ---------- Layout ---------- */
+    --rs-sidebar-width: 272px;
+    --rs-topbar-height: 76px;
+    --rs-content-max: 1440px;
+
+    /* ---------- Spacing scale ---------- */
+    --rs-space-1: 4px;
+    --rs-space-2: 8px;
+    --rs-space-3: 12px;
+    --rs-space-4: 16px;
+    --rs-space-5: 24px;
+    --rs-space-6: 32px;
+    --rs-space-7: 48px;
+
+    /* ---------- Motion ---------- */
+    --rs-transition: 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    --rs-transition-slow: 420ms cubic-bezier(0.16, 1, 0.3, 1);
+    --rs-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* ---------- Futuristic geometry ---------- */
+    --rs-clip-corner: polygon(
+        0 0,
+        calc(100% - 14px) 0,
+        100% 14px,
+        100% 100%,
+        14px 100%,
+        0 calc(100% - 14px)
+    );
+    --rs-clip-tag: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+
+    /* ---------- Signature motifs ---------- */
+    --rs-stripe: repeating-linear-gradient(
+        135deg,
+        var(--mu-red) 0 8px,
+        transparent 8px 16px
+    );
+    --rs-grid-lines: rgba(255, 255, 255, 0.028);
+    --rs-scanline: rgba(255, 255, 255, 0.02);
+}
+
+/* ==================== ROLE ACCENTS ==================== */
+
+.rs-role-admin {
+    --rs-accent: var(--mu-red);
+    --rs-accent-soft: rgba(218, 2, 14, 0.14);
+    --rs-accent-glow: rgba(218, 2, 14, 0.45);
+}
+
+.rs-role-kasir {
+    --rs-accent: #ff3b2f;
+    --rs-accent-soft: rgba(255, 59, 47, 0.14);
+    --rs-accent-glow: rgba(255, 59, 47, 0.42);
+}
+
+.rs-role-gudang {
+    --rs-accent: var(--mu-gold);
+    --rs-accent-soft: rgba(251, 225, 34, 0.13);
+    --rs-accent-glow: rgba(251, 225, 34, 0.35);
+}
+
+.rs-role-manager {
+    --rs-accent: #ff4d6d;
+    --rs-accent-soft: rgba(255, 77, 109, 0.14);
+    --rs-accent-glow: rgba(255, 77, 109, 0.42);
+}
+
+.rs-role-penjualan {
+    --rs-accent: #ff6a3d;
+    --rs-accent-soft: rgba(255, 106, 61, 0.14);
+    --rs-accent-glow: rgba(255, 106, 61, 0.42);
+}

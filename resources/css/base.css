@@ -1,0 +1,202 @@
+/* ==================== BASE ==================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    scrollbar-color: var(--rs-red-deep) transparent;
+    scrollbar-width: thin;
+}
+
+.rs-body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--rs-bg);
+    color: var(--rs-text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.rs-body a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.rs-body button,
+.rs-body input,
+.rs-body select,
+.rs-body textarea {
+    font: inherit;
+}
+
+.rs-body button {
+    cursor: pointer;
+}
+
+.rs-body svg {
+    display: block;
+    flex-shrink: 0;
+}
+
+.rs-body :focus-visible {
+    outline: 2px solid var(--rs-accent);
+    outline-offset: 3px;
+    border-radius: var(--rs-radius-xs);
+}
+
+.rs-body ::selection {
+    background: var(--rs-accent);
+    color: var(--rs-white);
+}
+
+.rs-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Custom scrollbar (WebKit) */
+.rs-body ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.rs-body ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.rs-body ::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: var(--rs-radius-pill);
+    background: linear-gradient(180deg, var(--rs-red-deep), var(--mu-red-dark));
+    background-clip: content-box;
+}
+
+.rs-body ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--rs-red), var(--rs-red-deep));
+    background-clip: content-box;
+}
+
+/* ==================== BACKGROUND FX ==================== */
+
+.rs-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 70% 50% at 82% -10%, rgba(218, 2, 14, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 45% at 5% 105%, rgba(139, 1, 8, 0.18), transparent 62%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(251, 225, 34, 0.03), transparent 70%),
+        linear-gradient(180deg, var(--mu-black) 0%, var(--rs-bg-mid) 48%, var(--rs-bg-deep) 100%);
+}
+
+/* Diagonal kit stripes — the signature United motif */
+.rs-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        135deg,
+        rgba(218, 2, 14, 0.055) 0 2px,
+        transparent 2px 26px
+    );
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 10%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 10%, transparent 78%);
+}
+
+/* Fine noise grain for depth */
+.rs-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.22;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
+.rs-bg-grid {
+    position: absolute;
+    inset: -30% -20% -20%;
+    background-image:
+        linear-gradient(var(--rs-grid-lines) 1px, transparent 1px),
+        linear-gradient(90deg, var(--rs-grid-lines) 1px, transparent 1px);
+    background-size: 56px 56px;
+    transform: perspective(700px) rotateX(54deg) translateY(-6%);
+    transform-origin: center top;
+    opacity: 0.5;
+    animation: rsGridDrift 32s linear infinite;
+}
+
+.rs-bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(10px);
+}
+
+.rs-bg-glow-a {
+    top: -280px;
+    right: -180px;
+    width: 720px;
+    height: 720px;
+    background: radial-gradient(circle, rgba(218, 2, 14, 0.26), transparent 66%);
+    animation: rsPulse 9s ease-in-out infinite;
+}
+
+.rs-bg-glow-b {
+    bottom: -320px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 1, 8, 0.22), transparent 70%);
+    animation: rsPulse 13s ease-in-out infinite reverse;
+}
+
+.rs-bg-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.022) 0,
+        rgba(255, 255, 255, 0.022) 1px,
+        transparent 1px,
+        transparent 4px
+    );
+    opacity: 0.3;
+}
+
+.rs-skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 100;
+    padding: 10px 14px;
+    border: 1px solid var(--rs-accent);
+    border-radius: var(--rs-radius-sm);
+    background: var(--rs-surface-solid);
+    color: var(--rs-text);
+    font-size: 12.5px;
+    font-weight: 700;
+    transform: translateY(-150%);
+    transition: transform var(--rs-transition);
+}
+
+.rs-skip-link:focus {
+    transform: translateY(0);
+}

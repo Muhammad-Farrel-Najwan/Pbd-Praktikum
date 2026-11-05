@@ -6,9 +6,16 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: [
+                'resources/css/app.css',
+                'resources/css/receipt.css',
+                'resources/js/app.js',
+            ],
             refresh: true,
             fonts: [
+                bunny('Chakra Petch', {
+                    weights: [300, 400, 500, 600, 700],
+                }),
                 bunny('Exo 2', {
                     weights: [300, 400, 500, 600, 700],
                 }),

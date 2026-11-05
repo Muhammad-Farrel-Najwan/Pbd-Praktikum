@@ -24,6 +24,8 @@
 
         return false;
     };
+
+    $showCommandPalette = $role === 'admin';
 @endphp
 
 <!DOCTYPE html>
@@ -35,6 +37,17 @@
 
     <script>
         document.documentElement.classList.add('js');
+
+        (function () {
+            try {
+                var density = window.localStorage.getItem('redstock:density');
+
+                document.documentElement.dataset.density =
+                    density === 'compact' ? 'compact' : 'comfortable';
+            } catch (error) {
+                document.documentElement.dataset.density = 'comfortable';
+            }
+        })();
     </script>
 
     <title>{{ $title }} | RedStock</title>
@@ -45,6 +58,10 @@
 </head>
 <body @class(['rs-body', 'rs-role-' . $role])>
     <a class="rs-skip-link" href="#rs-main-content">Lewati ke konten utama</a>
+
+    <div class="rs-progress" data-progress aria-hidden="true">
+        <div class="rs-progress-bar" data-progress-fill></div>
+    </div>
 
     <div class="rs-bg" aria-hidden="true">
         <span class="rs-bg-grid"></span>
@@ -171,6 +188,20 @@
                 </div>
 
                 <div class="rs-topbar-right">
+                    @if ($showCommandPalette)
+                        <button type="button" class="rs-topbar-action" data-cmdk-open
+                            aria-label="Buka pencarian cepat (Ctrl+K)">
+                            <x-ui.icon name="search" />
+                            <span class="rs-topbar-action-text">Cari</span>
+                            <span class="rs-kbd">Ctrl K</span>
+                        </button>
+                    @endif
+
+                    <button type="button" class="rs-icon-btn" data-density-toggle="compact"
+                        aria-label="Ganti kepadatan tampilan" aria-pressed="false" title="Kepadatan tampilan">
+                        <x-ui.icon name="layers" />
+                    </button>
+
                     <x-ui.notification-center
                         :groups="$notificationGroups ?? []"
                         :enabled="$notificationsEnabled ?? false"
@@ -199,6 +230,12 @@
     </div>
 
     <x-ui.confirm-dialog />
+
+    <div class="rs-toast-stack" data-toast-stack aria-live="polite" aria-atomic="false"></div>
+
+    @if ($showCommandPalette)
+        <x-ui.command-palette :navigation="$navigation" />
+    @endif
 
     @stack('scripts')
 </body>
