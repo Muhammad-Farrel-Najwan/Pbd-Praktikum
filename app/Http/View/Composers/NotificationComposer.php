@@ -44,7 +44,13 @@ class NotificationComposer
                 (SELECT COUNT(*) FROM retur WHERE status = ?) AS retur_pending,
                 (SELECT COUNT(*) FROM penerimaan WHERE status = ?) AS penerimaan_pending,
                 (SELECT COUNT(*) FROM penjualan WHERE status = ?) AS penjualan_pending,
-                (SELECT COUNT(*) FROM pengadaan WHERE status IS NULL) AS pengadaan_pending,
+                (SELECT COUNT(*) FROM pengadaan pg
+                    WHERE NOT EXISTS (
+                        SELECT 1
+                        FROM penerimaan p
+                        WHERE p.pengadaan_idpengadaan = pg.idpengadaan
+                    )
+                ) AS pengadaan_pending,
                 (SELECT COUNT(*) FROM barang b
                     WHERE b.status = 1
                       AND COALESCE((

@@ -3083,6 +3083,12 @@ html {
 /* ==================== CONFIRM MODAL ==================== */
 
 .rs-modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    height: fit-content;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
     width: min(440px, calc(100vw - 32px));
     max-width: none;
     padding: 0;

@@ -12,7 +12,7 @@
         <x-ui.panel title="Informasi Barang" description="Kolom bertanda * wajib diisi.">
             <form method="POST" action="{{ route('admin.barang.update', $barang->id) }}" id="barang-form">
                 @csrf
-                @method('PUT')
+                @method('PUT')  
 
                 <div class="rs-form-grid">
                     <x-ui.field label="Jenis Barang" name="jenis" hint="Isi satu karakter kode jenis."

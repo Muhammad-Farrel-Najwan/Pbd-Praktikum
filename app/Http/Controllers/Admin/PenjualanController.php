@@ -119,29 +119,27 @@ class PenjualanController extends Controller
                 ]);
             }
 
-            $ids = array_column($items, 'idbarang');
-            $placeholders = implode(',', array_fill(0, count($items), '?'));
+            // Kunci barang
+            $idbarang = implode(',', array_column($items, 'idbarang'));
 
-            // Kunci barang biar stoknya tidak dijual bersamaan oleh transaksi lain
             DB::select(
                 "SELECT idbarang
-                 FROM barang
-                 WHERE idbarang IN ($placeholders)
-                 ORDER BY idbarang
-                 FOR UPDATE",
-                $ids
+                FROM barang
+                WHERE idbarang IN ($idbarang)
+                ORDER BY idbarang
+                FOR UPDATE"
             );
 
+            // Ambil data barang
             $barangs = DB::select(
                 "SELECT
-                    b.idbarang,
-                    b.nama,
-                    b.harga,
-                    fn_hitung_harga_jual(b.harga) AS harga_jual
-                 FROM barang AS b
-                 WHERE b.status = 1
-                   AND b.idbarang IN ($placeholders)",
-                $ids
+                b.idbarang,
+                b.nama,
+                b.harga,
+                fn_hitung_harga_jual(b.harga) AS harga_jual
+                FROM barang AS b
+                WHERE b.status = 1
+                AND b.idbarang IN ($idbarang)"
             );
 
             $barangById = collect($barangs)->keyBy('idbarang');
@@ -245,7 +243,7 @@ class PenjualanController extends Controller
 
             return back()
                 ->withInput()
-                ->with('error', 'Gagal menyimpan transaksi: '.$e->getMessage());
+                ->with('error', 'Gagal menyimpan transaksi: ' . $e->getMessage());
         }
     }
 

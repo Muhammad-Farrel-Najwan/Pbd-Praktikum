@@ -24,10 +24,12 @@ class DashboardController extends Controller
 
         // Cari margin aktif
         $activeMargin = null;
+        $currentMargin = null;
 
         foreach ($margins as $margin) {
             if ((int) $margin->status === 1) {
                 $activeMargin = $margin->idmargin_penjualan;
+                $currentMargin = $margin;
                 break;
             }
         }
@@ -52,6 +54,7 @@ class DashboardController extends Controller
         return view('admin.dashboard', [
             'margins' => $margins,
             'activeMargin' => $activeMargin,
+            'currentMargin' => $currentMargin,
 
             // Kirim ringkasan data master ke view
             'totalBarang' => $totalBarang,

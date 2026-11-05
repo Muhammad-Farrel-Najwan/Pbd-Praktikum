@@ -1,14 +1,3 @@
-@php
-    $currentMargin = null;
-
-    foreach ($margins as $item) {
-        if ((string) $item->idmargin_penjualan === (string) $activeMargin) {
-            $currentMargin = $item;
-            break;
-        }
-    }
-@endphp
-
 <x-layouts.admin title="Dashboard Admin" breadcrumb="RedStock / <span>Dashboard Admin</span>"
     topbar-title="Panel Administrator">
     <x-ui.page-header eyebrow="Control Center" title="Dashboard Admin"

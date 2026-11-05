@@ -10,5 +10,22 @@
         "boost:mcp"
       ]
     }
+  },
+  "model": "nexarouter/deepseek-v4-flash",
+  "small_model": "nexarouter/qwen3.8-flash",
+  "provider": {
+    "nexarouter": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NexaRouter",
+      "options": {
+        "baseURL": "https://router.nexaworks.web.id/v1",
+        "apiKey": "sk-e759999ad058ad2d2da0e34d7c6c18b726340492f158d677"
+      },
+      "models": {
+        "deepseek-v4-flash": { "name": "DeepSeek V4 Flash" },
+        "qwen3.8-flash": { "name": "Qwen 3.8 Flash" },
+        "claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" }
+      }
+    }
   }
 }
