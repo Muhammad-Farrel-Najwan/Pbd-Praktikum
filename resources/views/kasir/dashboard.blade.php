@@ -3,42 +3,23 @@
     breadcrumb="RedStock / <span>Dashboard Kasir</span>"
     topbar-title="Panel Kasir"
 >
-    <x-ui.page-header
+    <x-ui.page-intro
         eyebrow="Point of Sale"
         title="Dashboard Kasir"
         description="Pusat operasional transaksi penjualan di gerai RedStock."
+        :metrics="[
+            ['label' => 'Margin Aktif', 'value' => $marginAktif ? $marginAktif->persen . '%' : '—'],
+            ['label' => 'Transaksi Hari Ini', 'value' => (int) $totalTransaksi->total],
+            ['label' => 'Pendapatan Hari Ini', 'value' => 'Rp ' . number_format((float) $totalPendapatan->total, 0, ',', '.')],
+        ]"
+        :delay="40"
     >
         <x-slot:actions>
-            <span class="rs-date-chip">
-                <x-ui.icon name="calendar" :size="15" />
-                {{ now()->translatedFormat('d F Y') }}
-            </span>
-
             <x-ui.button href="{{ route('kasir.penjualan.create') }}" icon="plus">
                 Transaksi Baru
             </x-ui.button>
         </x-slot:actions>
-    </x-ui.page-header>
-
-    <x-ui.hero
-        eyebrow="Panel Kasir"
-        :title="'Selamat datang, ' . session('username', 'Kasir') . '!'"
-        description="Siap melayani transaksi pelanggan. Kelola penjualan dan pantau riwayat transaksi langsung dari panel kasir."
-        :delay="60"
-    >
-        <x-slot:aside>
-            <span class="rs-hero-icon" aria-hidden="true">
-                <x-ui.icon name="receipt" />
-            </span>
-
-            <div>
-                <div class="rs-hero-value">
-                    {{ $marginAktif ? $marginAktif->persen . '%' : '—' }}
-                </div>
-                <div class="rs-hero-label">Margin penjualan aktif</div>
-            </div>
-        </x-slot:aside>
-    </x-ui.hero>
+    </x-ui.page-intro>
 
     <section aria-labelledby="summary-title">
         <div class="rs-section-head">

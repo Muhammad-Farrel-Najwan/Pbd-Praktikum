@@ -1,7 +1,7 @@
 @import 'tailwindcss';
-
 @import './theme.css';
 @import './tokens.css';
+@import './motion.css';
 @import './base.css';
 @import './layout.css';
 @import './components.css';
@@ -11,6 +11,5 @@
 @import './overlays.css';
 @import './interactions.css';
 @import './responsive.css';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+@import './structure.css';
+@import './ambient.css';

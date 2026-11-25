@@ -1,3 +1,9 @@
+/**
+ * Pencarian tabel di sisi klien (tanpa reload).
+ *
+ * Dipakai oleh tabel yang seluruh barisnya sudah ada di halaman,
+ * misalnya daftar master data pada panel admin.
+ */
 export const initTableSearch = () => {
     document.querySelectorAll('[data-table-search]').forEach((input) => {
         const panel = input.closest('.rs-panel');
@@ -73,5 +79,39 @@ export const initTableSearch = () => {
         });
 
         applyFilter();
+    });
+};
+
+/**
+ * Pencarian tabel di sisi server (form GET).
+ *
+ * Dipakai oleh tabel berpaginasi supaya kata kunci berlaku untuk seluruh
+ * data, bukan hanya baris pada halaman yang sedang tampil. Filter lain
+ * dipertahankan oleh hidden input di komponen table-search.
+ */
+export const initTableSearchForm = () => {
+    document.querySelectorAll('[data-table-search-form]').forEach((form) => {
+        const input = form.querySelector('input[name="q"]');
+        const clear = form.querySelector('[data-table-search-clear]');
+
+        if (!input) {
+            return;
+        }
+
+        // Tekan Escape untuk mengosongkan kata kunci lalu cari ulang.
+        input.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') {
+                return;
+            }
+
+            event.preventDefault();
+            input.value = '';
+            form.submit();
+        });
+
+        clear?.addEventListener('click', () => {
+            input.value = '';
+            form.submit();
+        });
     });
 };

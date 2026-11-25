@@ -146,6 +146,10 @@
                     </tbody>
                 </table>
             </div>
+
+            <x-slot:footer>
+                <x-ui.table-summary :total="count($mutasi)" label="mutasi" />
+            </x-slot:footer>
         </x-ui.panel>
     </div>
 </x-layouts.admin>

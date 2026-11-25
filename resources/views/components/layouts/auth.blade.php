@@ -10,6 +10,17 @@
 
     <script>
         document.documentElement.classList.add('js');
+
+        (function () {
+            try {
+                var theme = window.localStorage.getItem('redstock:theme');
+
+                document.documentElement.dataset.theme =
+                    theme === 'light' ? 'light' : 'dark';
+            } catch (error) {
+                document.documentElement.dataset.theme = 'dark';
+            }
+        })();
     </script>
 
     <title>{{ $title }} | RedStock</title>
@@ -23,13 +34,24 @@
         <span class="rs-bg-grid"></span>
         <span class="rs-bg-glow rs-bg-glow-a"></span>
         <span class="rs-bg-glow rs-bg-glow-b"></span>
+        <span class="rs-bg-beam"></span>
+        <span class="rs-bg-aurora"></span>
+        <span class="rs-bg-spotlight" data-spotlight></span>
+        <span class="rs-bg-trail" data-trail="0"></span>
+        <span class="rs-bg-trail rs-bg-trail-2" data-trail="1"></span>
         <span class="rs-bg-scanlines"></span>
     </div>
 
+    <button type="button" class="rs-icon-btn rs-auth-theme" data-theme-toggle
+        aria-label="Aktifkan tema terang" title="Tema terang">
+        <x-ui.icon name="moon" class="rs-theme-dark-icon" />
+        <x-ui.icon name="sun" class="rs-theme-light-icon" />
+    </button>
+
     <main class="rs-auth">
         <section class="rs-auth-visual" aria-label="Tentang RedStock">
-            <span class="rs-auth-orb rs-auth-orb-a" aria-hidden="true"></span>
-            <span class="rs-auth-orb rs-auth-orb-b" aria-hidden="true"></span>
+            <span class="rs-auth-orb rs-auth-orb-a" data-parallax="18" aria-hidden="true"></span>
+            <span class="rs-auth-orb rs-auth-orb-b" data-parallax="30" aria-hidden="true"></span>
 
             <div class="rs-auth-radar" aria-hidden="true">
                 <span class="rs-auth-radar-sweep"></span>

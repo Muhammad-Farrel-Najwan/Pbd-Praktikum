@@ -140,5 +140,8 @@
                 </tbody>
             </table>
         </div>
+        <x-slot:footer>
+            <x-ui.table-summary :total="count($penerimaan)" label="penerimaan" />
+        </x-slot:footer>
     </x-ui.panel>
 </x-layouts.admin>

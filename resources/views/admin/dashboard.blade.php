@@ -1,13 +1,17 @@
 <x-layouts.admin title="Dashboard Admin" breadcrumb="RedStock / <span>Dashboard Admin</span>"
     topbar-title="Panel Administrator">
-    <x-ui.page-header eyebrow="Control Center" title="Dashboard Admin"
-        description="Kelola data master dan konfigurasi sistem inventaris RedStock dari satu tempat.">
+    <x-ui.page-intro
+        eyebrow="Control Center"
+        title="Dashboard Admin"
+        description="Kelola data master dan konfigurasi sistem inventaris RedStock dari satu tempat."
+        :metrics="[
+            ['label' => 'Margin Aktif', 'value' => $currentMargin ? $currentMargin->persen . '%' : '—'],
+            ['label' => 'Total Barang', 'value' => (int) $totalBarang],
+            ['label' => 'Total User', 'value' => (int) $totalUser],
+        ]"
+        :delay="40"
+    >
         <x-slot:actions>
-            <span class="rs-date-chip">
-                <x-ui.icon name="calendar" :size="15" />
-                {{ now()->translatedFormat('d F Y') }}
-            </span>
-
             <x-ui.button href="{{ route('admin.dashboard.barang') }}" variant="secondary" icon="box">
                 Data Barang
             </x-ui.button>
@@ -16,24 +20,7 @@
                 Data Pengadaan
             </x-ui.button>
         </x-slot:actions>
-    </x-ui.page-header>
-
-    <x-ui.hero eyebrow="Panel Administrator" :title="'Selamat datang, ' . session('username', 'Admin') . '!'"
-        description="Pantau pengaturan sistem dan pastikan konfigurasi inventaris tetap sesuai kebutuhan operasional."
-        :delay="60">
-        <x-slot:aside>
-            <span class="rs-hero-icon" aria-hidden="true">
-                <x-ui.icon name="sliders" />
-            </span>
-
-            <div>
-                <div class="rs-hero-value">
-                    {{ $currentMargin ? $currentMargin->persen . '%' : '—' }}
-                </div>
-                <div class="rs-hero-label">Margin aktif saat ini</div>
-            </div>
-        </x-slot:aside>
-    </x-ui.hero>
+    </x-ui.page-intro>
     <section aria-labelledby="master-data-title">
         <div class="rs-section-head">
             <div>
@@ -75,6 +62,42 @@
                 tone="blue" :delay="220" />
         </div>
     </section>
+
+    @php
+        $totalMaster = max(1, (int) $totalBarang + (int) $totalSatuan + (int) $totalVendor + (int) $totalUser);
+        $distribusi = [
+            ['label' => 'Barang', 'value' => (int) $totalBarang, 'icon' => 'box'],
+            ['label' => 'Satuan', 'value' => (int) $totalSatuan, 'icon' => 'ruler'],
+            ['label' => 'Vendor', 'value' => (int) $totalVendor, 'icon' => 'truck'],
+            ['label' => 'User', 'value' => (int) $totalUser, 'icon' => 'users'],
+        ];
+    @endphp
+
+    <x-ui.panel
+        title="Distribusi Data Master"
+        description="Perbandingan jumlah data yang tersimpan di sistem."
+        badge="Live"
+        class="rs-mt-panel"
+    >
+        <div class="rs-bars">
+            @foreach ($distribusi as $row)
+                @php
+                    $persen = (int) round(($row['value'] / $totalMaster) * 100);
+                @endphp
+
+                <div class="rs-bar-row">
+                    <span class="rs-bar-label">
+                        <x-ui.icon :name="$row['icon']" :size="15" />
+                        {{ $row['label'] }}
+                    </span>
+                    <span class="rs-bar-track">
+                        <span class="rs-bar-fill" style="--rs-bar: {{ max(2, $persen) }}%"></span>
+                    </span>
+                    <span class="rs-bar-value">{{ $row['value'] }}</span>
+                </div>
+            @endforeach
+        </div>
+    </x-ui.panel>
 
     <x-ui.panel id="pengaturan-margin" title="Pengaturan Margin Penjualan"
         description="Pilih margin yang akan digunakan sistem. Hanya satu margin yang boleh aktif." :badge="count($margins) . ' Opsi Margin'"

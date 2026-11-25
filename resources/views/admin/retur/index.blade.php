@@ -138,5 +138,8 @@
                 </tbody>
             </table>
         </div>
+        <x-slot:footer>
+            <x-ui.table-summary :total="count($retur)" label="retur" />
+        </x-slot:footer>
     </x-ui.panel>
 </x-layouts.admin>

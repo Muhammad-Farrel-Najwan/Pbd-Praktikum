@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Struk Penjualan #{{ $penjualan->idpenjualan }} | RedStock</title>
+    <script>
+        (function () {
+            try {
+                var theme = window.localStorage.getItem('redstock:theme');
+
+                document.documentElement.dataset.theme =
+                    theme === 'light' ? 'light' : 'dark';
+            } catch (error) {
+                document.documentElement.dataset.theme = 'dark';
+            }
+        })();
+    </script>
 
     @vite(['resources/css/receipt.css'])
 </head>
@@ -16,6 +28,9 @@
     </div>
 
     <main class="rs-receipt">
+    @if (($penjualan->status ?? null) === 'S')
+        <span class="rs-receipt-stamp" aria-hidden="true">LUNAS</span>
+    @endif
         <header class="rs-receipt-head">
             <img
                 src="{{ asset('images/logo-mu.svg') }}"

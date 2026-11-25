@@ -5,8 +5,14 @@
     'delay' => 0,
 ])
 
-<section class="rs-page-heading" data-reveal style="--reveal-delay: {{ $delay }}ms">
-    <div>
+{{-- Header halaman standar. Strukturnya sama dengan x-ui.page-intro agar
+     seluruh halaman terasa satu sistem, hanya tanpa baris metrik. --}}
+<section class="rs-page-intro is-compact" data-reveal style="--reveal-delay: {{ $delay }}ms">
+    <span class="rs-page-intro-rail" aria-hidden="true"></span>
+    <span class="rs-page-intro-grid" aria-hidden="true"></span>
+    <span class="rs-page-intro-ring" aria-hidden="true"></span>
+
+    <div class="rs-page-intro-main">
         @if ($eyebrow)
             <span class="rs-eyebrow">
                 <span class="rs-eyebrow-dot" aria-hidden="true"></span>
@@ -22,7 +28,7 @@
     </div>
 
     @if (isset($actions))
-        <div class="rs-heading-actions">
+        <div class="rs-page-intro-actions">
             {{ $actions }}
         </div>
     @endif

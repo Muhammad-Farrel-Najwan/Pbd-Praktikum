@@ -1,7 +1,7 @@
 /* ==========================================================================
    DESIGN TOKENS — "RED DEVIL FUTURISM"
    Manchester United inspired palette + futuristic interface language.
-   All legacy --rs-* names are preserved so existing components keep working.
+   Semua nama lama --rs-* dipertahankan agar komponen lama tetap jalan.
    ========================================================================== */
 
 :root {
@@ -16,25 +16,52 @@
     --mu-black-soft: #080c13;
     --mu-ink: #0b0f17;
 
+    /* ---------- RGB helpers (dipakai untuk warna transparan) ---------- */
+    --rs-ink-rgb: 255 255 255;
+    --rs-slate-rgb: 148 163 184;
+    --rs-surface-rgb: 11 15 23;
+    --rs-surface-2-rgb: 17 23 38;
+    --rs-surface-3-rgb: 8 12 19;
+    --rs-red-rgb: 218 2 14;
+    --rs-red-deep-rgb: 139 1 8;
+    --rs-gold-rgb: 251 225 34;
+    --rs-success-rgb: 34 197 94;
+    --rs-warning-rgb: 245 158 11;
+    --rs-danger-rgb: 255 66 87;
+    --rs-info-rgb: 56 189 248;
+    --rs-violet-rgb: 168 85 247;
+    --rs-rose-rgb: 255 61 129;
+
     /* ---------- Surfaces ---------- */
     --rs-bg: var(--mu-black);
     --rs-bg-soft: var(--mu-black-soft);
-    --rs-surface: rgba(11, 15, 23, 0.82);
+    --rs-surface: rgb(var(--rs-surface-rgb) / 0.82);
     --rs-surface-solid: var(--mu-ink);
     --rs-surface-raised: #111726;
-    --rs-surface-glass: rgba(17, 23, 38, 0.62);
+    --rs-surface-glass: rgb(var(--rs-surface-2-rgb) / 0.62);
+    --rs-surface-1: rgb(var(--rs-surface-rgb));
+    --rs-surface-2: rgb(var(--rs-surface-2-rgb));
+    --rs-surface-3: rgb(var(--rs-surface-3-rgb));
+
+    /* ---------- Lapisan isi (aman untuk light mode) ---------- */
+    --rs-fill-weak: rgb(var(--rs-ink-rgb) / 0.025);
+    --rs-fill: rgb(var(--rs-ink-rgb) / 0.05);
+    --rs-fill-strong: rgb(var(--rs-ink-rgb) / 0.08);
+    --rs-line-soft: rgb(var(--rs-ink-rgb) / 0.05);
+    --rs-line: rgb(var(--rs-ink-rgb) / 0.08);
+    --rs-line-strong: rgb(var(--rs-ink-rgb) / 0.16);
 
     /* ---------- Borders ---------- */
-    --rs-border: rgba(255, 255, 255, 0.08);
-    --rs-border-strong: rgba(255, 255, 255, 0.16);
-    --rs-border-accent: rgba(218, 2, 14, 0.38);
+    --rs-border: var(--rs-line);
+    --rs-border-strong: var(--rs-line-strong);
+    --rs-border-accent: rgb(var(--rs-red-rgb) / 0.38);
 
     /* ---------- Brand red ---------- */
     --rs-red: var(--mu-red);
     --rs-red-strong: #b3010b;
-    --rs-red-soft: rgba(218, 2, 14, 0.13);
-    --rs-red-glow: rgba(218, 2, 14, 0.45);
-    --rs-red-hairline: rgba(218, 2, 14, 0.22);
+    --rs-red-soft: rgb(var(--rs-red-rgb) / 0.13);
+    --rs-red-glow: rgb(var(--rs-red-rgb) / 0.45);
+    --rs-red-hairline: rgb(var(--rs-red-rgb) / 0.22);
 
     /* ---------- Text ---------- */
     --rs-text: #f7f9fc;
@@ -77,31 +104,33 @@
     --rs-bg-deep: #04060a;
     --rs-bg-mid: #070a11;
 
-    /* ---------- Accent (overridden per role) ---------- */
+    /* ---------- Accent (satu identitas: merah MU + emas) ---------- */
     --rs-accent: var(--rs-red);
     --rs-accent-soft: var(--rs-red-soft);
     --rs-accent-glow: var(--rs-red-glow);
+    --rs-accent-secondary: var(--mu-gold);
+    --rs-accent-secondary-soft: rgb(var(--rs-gold-rgb) / 0.12);
 
-    /* ---------- Radii ---------- */
+    /* ---------- Radii (dikunci 5 nilai) ---------- */
     --rs-radius-xs: 6px;
     --rs-radius-sm: 10px;
     --rs-radius: 14px;
     --rs-radius-lg: 20px;
-    --rs-radius-xl: 28px;
+    --rs-radius-xl: 24px;
     --rs-radius-pill: 999px;
 
     /* ---------- Shadows ---------- */
     --rs-shadow-panel: 0 24px 60px -30px rgba(0, 0, 0, 0.9);
     --rs-shadow-glow: 0 0 32px -8px var(--rs-accent-glow);
     --rs-shadow-glow-strong: 0 0 48px -10px var(--rs-accent-glow);
-    --rs-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --rs-shadow-inset: inset 0 1px 0 rgb(var(--rs-ink-rgb) / 0.06);
 
     /* ---------- Layout ---------- */
     --rs-sidebar-width: 272px;
     --rs-topbar-height: 76px;
     --rs-content-max: 1440px;
 
-    /* ---------- Spacing scale ---------- */
+    /* ---------- Spacing scale (7 langkah) ---------- */
     --rs-space-1: 4px;
     --rs-space-2: 8px;
     --rs-space-3: 12px;
@@ -109,6 +138,14 @@
     --rs-space-5: 24px;
     --rs-space-6: 32px;
     --rs-space-7: 48px;
+
+    /* ---------- Type scale (6 langkah) ---------- */
+    --rs-fs-eyebrow: 10px;
+    --rs-fs-label: 11px;
+    --rs-fs-body: 13px;
+    --rs-fs-subtitle: 15px;
+    --rs-fs-h2: 18px;
+    --rs-fs-h1: 26px;
 
     /* ---------- Motion ---------- */
     --rs-transition: 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -132,38 +169,110 @@
         var(--mu-red) 0 8px,
         transparent 8px 16px
     );
-    --rs-grid-lines: rgba(255, 255, 255, 0.028);
-    --rs-scanline: rgba(255, 255, 255, 0.02);
+    --rs-grid-lines: rgb(var(--rs-ink-rgb) / 0.028);
+    --rs-scanline: rgb(var(--rs-ink-rgb) / 0.02);
 }
 
-/* ==================== ROLE ACCENTS ==================== */
+/* ==================== ROLE ACCENTS ====================
+   Disatukan: semua panel memakai merah MU, emas hanya sebagai aksen
+   sekunder (hero, highlight, badge peringatan). */
 
-.rs-role-admin {
-    --rs-accent: var(--mu-red);
-    --rs-accent-soft: rgba(218, 2, 14, 0.14);
-    --rs-accent-glow: rgba(218, 2, 14, 0.45);
-}
-
-.rs-role-kasir {
-    --rs-accent: #ff3b2f;
-    --rs-accent-soft: rgba(255, 59, 47, 0.14);
-    --rs-accent-glow: rgba(255, 59, 47, 0.42);
-}
-
-.rs-role-gudang {
-    --rs-accent: var(--mu-gold);
-    --rs-accent-soft: rgba(251, 225, 34, 0.13);
-    --rs-accent-glow: rgba(251, 225, 34, 0.35);
-}
-
-.rs-role-manager {
-    --rs-accent: #ff4d6d;
-    --rs-accent-soft: rgba(255, 77, 109, 0.14);
-    --rs-accent-glow: rgba(255, 77, 109, 0.42);
-}
-
+.rs-role-admin,
+.rs-role-kasir,
+.rs-role-gudang,
+.rs-role-manager,
 .rs-role-penjualan {
-    --rs-accent: #ff6a3d;
-    --rs-accent-soft: rgba(255, 106, 61, 0.14);
-    --rs-accent-glow: rgba(255, 106, 61, 0.42);
+    --rs-accent: var(--rs-red);
+    --rs-accent-soft: var(--rs-red-soft);
+    --rs-accent-glow: var(--rs-red-glow);
+    --rs-accent-secondary: var(--mu-gold);
+    --rs-accent-secondary-soft: rgb(var(--rs-gold-rgb) / 0.12);
+}
+
+/* ==================== LIGHT THEME ====================
+   Token di bawah membalik lapisan isi tanpa mengubah komponen. */
+
+html[data-theme='light'] {
+    color-scheme: light;
+
+    --rs-ink-rgb: 15 23 42;
+    --rs-slate-rgb: 100 116 139;
+    --rs-surface-rgb: 255 255 255;
+    --rs-surface-2-rgb: 248 250 252;
+    --rs-surface-3-rgb: 241 245 249;
+
+    --rs-gold-rgb: 161 98 7;
+    --rs-success-rgb: 22 163 74;
+    --rs-warning-rgb: 180 83 9;
+    --rs-danger-rgb: 220 38 38;
+    --rs-info-rgb: 2 132 199;
+    --rs-violet-rgb: 126 34 206;
+    --rs-rose-rgb: 225 29 72;
+
+    --rs-bg: #eef2f8;
+    --rs-bg-soft: #f7f9fd;
+    --rs-bg-deep: #e3e9f3;
+    --rs-bg-mid: #eef2f8;
+
+    --rs-surface: rgb(255 255 255 / 0.82);
+    --rs-surface-solid: #ffffff;
+    --rs-surface-raised: #ffffff;
+    --rs-surface-glass: rgb(255 255 255 / 0.72);
+    --rs-surface-1: #ffffff;
+    --rs-surface-2: #f8fafc;
+    --rs-surface-3: #f1f5f9;
+
+    --rs-border: rgb(var(--rs-ink-rgb) / 0.10);
+    --rs-border-strong: rgb(var(--rs-ink-rgb) / 0.18);
+    --rs-border-accent: rgb(var(--rs-red-rgb) / 0.28);
+
+    --rs-text: #0b1220;
+    --rs-text-soft: #334155;
+    --rs-muted: #5b677c;
+    --rs-muted-dim: #7b879b;
+    --rs-white: #ffffff;
+
+    --rs-success: #15803d;
+    --rs-warning: #a16207;
+    --rs-danger: #dc2626;
+    --rs-info: #0284c7;
+
+    --rs-success-soft: #15803d;
+    --rs-success-soft-2: #166534;
+    --rs-danger-soft: #b91c1c;
+    --rs-danger-soft-2: #991b1b;
+    --rs-danger-soft-3: #b91c1c;
+    --rs-danger-glow: #dc2626;
+    --rs-info-soft: #0369a1;
+    --rs-info-soft-2: #075985;
+    --rs-gold-soft: #854d0e;
+    --rs-amber: #b45309;
+    --rs-violet-soft: #6d28d9;
+    --rs-rose-soft: #be123c;
+
+    --rs-slate-100: #0f172a;
+    --rs-slate-300: #94a3b8;
+    --rs-slate-400: #64748b;
+    --rs-slate-500: #94a3b8;
+    --rs-slate-700: #cbd5e1;
+    --rs-slate-800: #e2e8f0;
+
+    /* Emas digelapkan agar tetap terbaca di atas latar terang */
+    --mu-gold: #a16207;
+    --mu-gold-deep: #854d0e;
+    --mu-red-bright: #e11d2e;
+
+    --rs-red: #c60009;
+    --rs-red-strong: #a30007;
+    --rs-red-soft: rgb(var(--rs-red-rgb) / 0.08);
+    --rs-red-glow: rgb(var(--rs-red-rgb) / 0.22);
+    --rs-red-hairline: rgb(var(--rs-red-rgb) / 0.18);
+
+    --rs-shadow-panel: 0 20px 48px -32px rgb(15 23 42 / 0.38);
+    --rs-shadow-glow: 0 0 26px -12px var(--rs-accent-glow);
+    --rs-shadow-glow-strong: 0 0 36px -14px var(--rs-accent-glow);
+    --rs-shadow-inset: inset 0 1px 0 rgb(255 255 255 / 0.9);
+
+    --rs-grid-lines: rgb(15 23 42 / 0.045);
+    --rs-scanline: rgb(15 23 42 / 0.018);
 }

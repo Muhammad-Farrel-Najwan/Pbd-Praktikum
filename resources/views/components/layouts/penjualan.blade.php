@@ -8,9 +8,8 @@
     $navigation = [
         ['label' => 'Dashboard', 'route' => 'penjualan.dashboard', 'active' => 'penjualan.dashboard', 'icon' => 'grid'],
         ['section' => 'Penjualan'],
-        ['label' => 'Penjualan', 'icon' => 'receipt', 'disabled' => true, 'badge' => 'Segera'],
-        ['label' => 'Retur Penjualan', 'icon' => 'rotate', 'disabled' => true, 'badge' => 'Segera'],
-        ['label' => 'Riwayat Penjualan', 'icon' => 'clock', 'disabled' => true, 'badge' => 'Segera'],
+        ['label' => 'Transaksi Penjualan', 'route' => 'penjualan.penjualan.create', 'active' => 'penjualan.penjualan.create', 'icon' => 'receipt'],
+        ['label' => 'Riwayat Penjualan', 'route' => 'penjualan.penjualan.index', 'active' => ['penjualan.penjualan.index', 'penjualan.penjualan.detail', 'penjualan.penjualan.struk'], 'icon' => 'clock'],
     ];
 @endphp
 

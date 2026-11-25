@@ -101,10 +101,40 @@ html {
     overflow: hidden;
     pointer-events: none;
     background:
-        radial-gradient(ellipse 70% 50% at 82% -10%, rgba(218, 2, 14, 0.22), transparent 60%),
-        radial-gradient(ellipse 60% 45% at 5% 105%, rgba(139, 1, 8, 0.18), transparent 62%),
-        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(251, 225, 34, 0.03), transparent 70%),
-        linear-gradient(180deg, var(--mu-black) 0%, var(--rs-bg-mid) 48%, var(--rs-bg-deep) 100%);
+        radial-gradient(ellipse 70% 50% at 82% -10%, rgb(var(--rs-red-rgb) / 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 45% at 5% 105%, rgb(var(--rs-red-deep-rgb) / 0.18), transparent 62%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgb(var(--rs-gold-rgb) / 0.03), transparent 70%),
+        linear-gradient(180deg, var(--rs-bg) 0%, var(--rs-bg-mid) 48%, var(--rs-bg-deep) 100%);
+}
+
+html[data-theme='light'] .rs-bg {
+    background:
+        radial-gradient(ellipse 70% 50% at 82% -10%, rgb(var(--rs-red-rgb) / 0.10), transparent 62%),
+        radial-gradient(ellipse 60% 45% at 5% 105%, rgb(var(--rs-red-deep-rgb) / 0.06), transparent 64%),
+        linear-gradient(180deg, #f8fafd 0%, var(--rs-bg) 52%, var(--rs-bg-deep) 100%);
+}
+
+html[data-theme='light'] .rs-bg::after {
+    opacity: 0.10;
+    mix-blend-mode: multiply;
+}
+
+/* Sorotan lampu yang mengikuti kursor di latar */
+.rs-bg-spotlight {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: radial-gradient(
+        420px circle at var(--rs-pointer-x, 50%) var(--rs-pointer-y, 30%),
+        rgb(var(--rs-red-rgb) / 0.10),
+        transparent 62%
+    );
+    transition: opacity 320ms ease;
+    pointer-events: none;
+}
+
+.rs-bg-spotlight.is-active {
+    opacity: 1;
 }
 
 /* Diagonal kit stripes — the signature United motif */
@@ -114,7 +144,7 @@ html {
     inset: 0;
     background: repeating-linear-gradient(
         135deg,
-        rgba(218, 2, 14, 0.055) 0 2px,
+        rgb(var(--rs-red-rgb) / 0.055) 0 2px,
         transparent 2px 26px
     );
     mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 10%, transparent 78%);
@@ -155,7 +185,7 @@ html {
     right: -180px;
     width: 720px;
     height: 720px;
-    background: radial-gradient(circle, rgba(218, 2, 14, 0.26), transparent 66%);
+    background: radial-gradient(circle, rgb(var(--rs-red-rgb) / 0.26), transparent 66%);
     animation: rsPulse 9s ease-in-out infinite;
 }
 
@@ -164,7 +194,7 @@ html {
     left: -200px;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(139, 1, 8, 0.22), transparent 70%);
+    background: radial-gradient(circle, rgb(var(--rs-red-deep-rgb) / 0.22), transparent 70%);
     animation: rsPulse 13s ease-in-out infinite reverse;
 }
 
@@ -173,8 +203,8 @@ html {
     inset: 0;
     background: repeating-linear-gradient(
         0deg,
-        rgba(255, 255, 255, 0.022) 0,
-        rgba(255, 255, 255, 0.022) 1px,
+        rgb(var(--rs-ink-rgb) / 0.022) 0,
+        rgb(var(--rs-ink-rgb) / 0.022) 1px,
         transparent 1px,
         transparent 4px
     );

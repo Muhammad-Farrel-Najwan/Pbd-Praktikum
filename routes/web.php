@@ -11,11 +11,17 @@ use App\Http\Controllers\Admin\StokController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\gudangController;
+use App\Http\Controllers\Gudang\DashboardController as GudangDashboardController;
+use App\Http\Controllers\Gudang\PenerimaanController as GudangPenerimaanController;
+use App\Http\Controllers\Gudang\PengadaanController as GudangPengadaanController;
+use App\Http\Controllers\Gudang\StokController as GudangStokController;
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\PenjualanController as KasirPenjualanController;
-use App\Http\Controllers\managerController;
-use App\Http\Controllers\penjualanController;
+use App\Http\Controllers\Manager\ApprovalController;
+use App\Http\Controllers\Manager\DashboardController as ManagerDashboardController;
+use App\Http\Controllers\Manager\LaporanController;
+use App\Http\Controllers\Penjualan\DashboardController as PenjualanDashboardController;
+use App\Http\Controllers\Penjualan\PenjualanController as StaffPenjualanController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -171,17 +177,83 @@ Route::middleware([AuthMiddleware::class])->group(function () {
         });
 
     // Manager Route
-    Route::get('/dashboard/manager', [managerController::class, 'index'])
-        ->name('manager.dashboard')
-        ->middleware(RoleMiddleware::class.':manager');
+    Route::middleware(RoleMiddleware::class.':manager')
+        ->prefix('dashboard/manager')
+        ->as('manager.')
+        ->group(function () {
+            Route::get('/', [ManagerDashboardController::class, 'index'])
+                ->name('dashboard');
+
+            // Approval pengadaan
+            Route::get('/approval', [ApprovalController::class, 'dataApproval'])
+                ->name('approval.index');
+            Route::get('/approval/{id}', [ApprovalController::class, 'detailApproval'])
+                ->name('approval.detail');
+            Route::post('/approval/{id}/setujui', [ApprovalController::class, 'setujuiPengadaan'])
+                ->name('approval.setujui');
+
+            // Laporan
+            Route::get('/laporan/penjualan', [LaporanController::class, 'laporanPenjualan'])
+                ->name('laporan.penjualan');
+            Route::get('/laporan/stok', [LaporanController::class, 'laporanStok'])
+                ->name('laporan.stok');
+            Route::get('/laporan/stok/{id}', [LaporanController::class, 'detailLaporanStok'])
+                ->name('laporan.stok.detail');
+        });
 
     // Gudang Route
-    Route::get('/dashboard/gudang', [gudangController::class, 'index'])
-        ->name('gudang.dashboard')
-        ->middleware(RoleMiddleware::class.':petugas-gudang');
+    Route::middleware(RoleMiddleware::class.':petugas-gudang')
+        ->prefix('dashboard/gudang')
+        ->as('gudang.')
+        ->group(function () {
+            Route::get('/', [GudangDashboardController::class, 'index'])
+                ->name('dashboard');
 
-    // Penjualan Route
-    Route::get('/dashboard/penjualan', [penjualanController::class, 'index'])
-        ->name('penjualan.dashboard')
-        ->middleware(RoleMiddleware::class.':staff-penjualan');
+            // Pengadaan
+            Route::get('/pengadaan', [GudangPengadaanController::class, 'dataPengadaan'])
+                ->name('pengadaan.index');
+            Route::get('/pengadaan/tambah', [GudangPengadaanController::class, 'createPengadaan'])
+                ->name('pengadaan.create');
+            Route::post('/pengadaan', [GudangPengadaanController::class, 'storePengadaan'])
+                ->name('pengadaan.store');
+            Route::get('/pengadaan/{id}', [GudangPengadaanController::class, 'detailPengadaan'])
+                ->name('pengadaan.detail');
+
+            // Penerimaan
+            Route::get('/penerimaan', [GudangPenerimaanController::class, 'dataPenerimaan'])
+                ->name('penerimaan.index');
+            Route::get('/penerimaan/tambah', [GudangPenerimaanController::class, 'createPenerimaan'])
+                ->name('penerimaan.create');
+            Route::post('/penerimaan', [GudangPenerimaanController::class, 'storePenerimaan'])
+                ->name('penerimaan.store');
+            Route::get('/penerimaan/{id}', [GudangPenerimaanController::class, 'detailPenerimaan'])
+                ->name('penerimaan.detail');
+
+            // Stok
+            Route::get('/stok', [GudangStokController::class, 'dataStok'])
+                ->name('stok.index');
+            Route::get('/stok/{id}', [GudangStokController::class, 'detailStok'])
+                ->name('stok.detail');
+        });
+
+    // Staff Penjualan Route
+    Route::middleware(RoleMiddleware::class.':staff-penjualan')
+        ->prefix('dashboard/penjualan')
+        ->as('penjualan.')
+        ->group(function () {
+            Route::get('/', [PenjualanDashboardController::class, 'index'])
+                ->name('dashboard');
+
+            // Penjualan
+            Route::get('/penjualan', [StaffPenjualanController::class, 'dataPenjualan'])
+                ->name('penjualan.index');
+            Route::get('/penjualan/create', [StaffPenjualanController::class, 'createPenjualan'])
+                ->name('penjualan.create');
+            Route::post('/penjualan', [StaffPenjualanController::class, 'storePenjualan'])
+                ->name('penjualan.store');
+            Route::get('/penjualan/{id}/struk', [StaffPenjualanController::class, 'strukPenjualan'])
+                ->name('penjualan.struk');
+            Route::get('/penjualan/{id}', [StaffPenjualanController::class, 'detailPenjualan'])
+                ->name('penjualan.detail');
+        });
 });

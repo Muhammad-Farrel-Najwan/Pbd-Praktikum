@@ -24,6 +24,18 @@ body {
     min-height: 100vh;
 }
 
+html[data-theme='light'] body {
+    background:
+        radial-gradient(ellipse 70% 50% at 82% -10%, rgba(218, 2, 14, 0.08), transparent 60%),
+        linear-gradient(180deg, #f8fafd 0%, #eef2f8 48%, #e3e9f3 100%);
+}
+
+html[data-theme='light'] .rs-print-btn.is-secondary {
+    background: rgba(255, 255, 255, 0.85);
+    color: #334155;
+    border-color: rgba(15, 23, 42, 0.14);
+}
+
 .rs-print-actions {
     display: flex;
     justify-content: center;
@@ -64,6 +76,7 @@ body {
 }
 
 .rs-receipt {
+    position: relative;
     width: 100%;
     max-width: 320px;
     margin: 0 auto;
@@ -73,6 +86,42 @@ body {
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
     font-size: 13px;
     line-height: 1.5;
+}
+
+/* Aksen kit di tepi atas kertas struk */
+.rs-receipt::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 4px;
+    border-radius: 12px 12px 0 0;
+    background: repeating-linear-gradient(
+        135deg,
+        #da020e 0 6px,
+        transparent 6px 12px
+    );
+    opacity: 0.9;
+}
+
+/* Stempel lunas untuk transaksi selesai */
+.rs-receipt-stamp {
+    position: absolute;
+    top: 16px;
+    right: -6px;
+    padding: 4px 12px;
+    border: 2px solid #da020e;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.75);
+    color: #da020e;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+    transform: rotate(8deg);
+    opacity: 0.85;
+    pointer-events: none;
 }
 
 .rs-receipt-head {
@@ -217,5 +266,17 @@ body {
         padding: 0;
         border-radius: 0;
         box-shadow: none;
+    }
+
+    .rs-receipt::before {
+        display: none;
+    }
+
+    .rs-receipt-stamp {
+        top: 0;
+        right: 0;
+        border-width: 1px;
+        background: transparent;
+        opacity: 0.95;
     }
 }

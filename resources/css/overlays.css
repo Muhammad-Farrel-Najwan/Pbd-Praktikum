@@ -14,77 +14,6 @@
     transform: translateY(0);
 }
 
-@keyframes rsGridDrift {
-    from {
-        background-position: 0 0, 0 0;
-    }
-
-    to {
-        background-position: 56px 56px, 56px 56px;
-    }
-}
-
-@keyframes rsPulse {
-    0%,
-    100% {
-        opacity: 0.72;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.04);
-    }
-}
-
-@keyframes rsBlink {
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.42;
-    }
-}
-
-@keyframes rsScan {
-    0% {
-        transform: translateY(-30%);
-        opacity: 0;
-    }
-
-    18% {
-        opacity: 1;
-    }
-
-    82% {
-        opacity: 0.8;
-    }
-
-    100% {
-        transform: translateY(480%);
-        opacity: 0;
-    }
-}
-
-@keyframes rsFloat {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes rsSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 /* ==================== NOTIFICATION CENTER ==================== */
 
 .rs-notif {
@@ -190,7 +119,7 @@
 .rs-notif-item:hover,
 .rs-notif-item:focus-visible {
     border-color: var(--rs-border-accent);
-    background: rgba(218, 2, 14, 0.055);
+    background: rgb(var(--rs-red-rgb) / 0.055);
 }
 
 .rs-notif-icon {
@@ -209,20 +138,20 @@
 }
 
 .rs-notif-icon.is-warning {
-    border-color: rgba(251, 225, 34, 0.26);
-    background: rgba(251, 225, 34, 0.1);
+    border-color: rgb(var(--rs-gold-rgb) / 0.26);
+    background: rgb(var(--rs-gold-rgb) / 0.1);
     color: var(--mu-gold);
 }
 
 .rs-notif-icon.is-danger {
-    border-color: rgba(255, 66, 87, 0.28);
-    background: rgba(255, 66, 87, 0.1);
+    border-color: rgb(var(--rs-danger-rgb) / 0.28);
+    background: rgb(var(--rs-danger-rgb) / 0.1);
     color: var(--rs-danger-glow);
 }
 
 .rs-notif-icon.is-info {
-    border-color: rgba(56, 189, 248, 0.24);
-    background: rgba(56, 189, 248, 0.09);
+    border-color: rgb(var(--rs-info-rgb) / 0.24);
+    background: rgb(var(--rs-info-rgb) / 0.09);
     color: var(--rs-info-soft);
 }
 
@@ -252,7 +181,7 @@
     min-width: 22px;
     padding: 2px 7px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgb(var(--rs-ink-rgb) / 0.05);
     color: var(--rs-text-soft);
     font-family: var(--font-mono);
     font-size: 10px;
@@ -275,18 +204,6 @@
     color: var(--rs-success);
 }
 
-@keyframes rsNotifIn {
-    from {
-        opacity: 0;
-        transform: translateY(-6px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
 /* ==================== CONFIRM MODAL ==================== */
 
 .rs-modal {
@@ -305,7 +222,7 @@
 }
 
 .rs-modal::backdrop {
-    background: rgba(2, 5, 10, 0.78);
+    background: rgb(var(--rs-surface-rgb) / 0.78);
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
 }
@@ -317,11 +234,11 @@
     border: 1px solid var(--rs-border-accent);
     border-radius: var(--rs-radius-lg);
     background:
-        linear-gradient(180deg, rgba(17, 23, 38, 0.96), rgba(8, 12, 19, 0.99));
+        linear-gradient(180deg, rgb(var(--rs-surface-2-rgb) / 0.96), rgb(var(--rs-surface-3-rgb) / 0.99));
     box-shadow:
         0 40px 90px -30px rgba(0, 0, 0, 0.95),
         0 0 60px -34px var(--rs-accent-glow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        inset 0 1px 0 rgb(var(--rs-ink-rgb) / 0.05);
     animation: rsModalIn 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -353,18 +270,18 @@
     width: 46px;
     height: 46px;
     margin-bottom: 16px;
-    border: 1px solid rgba(255, 66, 87, 0.26);
+    border: 1px solid rgb(var(--rs-danger-rgb) / 0.26);
     border-radius: 14px;
-    background: rgba(255, 66, 87, 0.1);
+    background: rgb(var(--rs-danger-rgb) / 0.1);
     color: var(--rs-danger-glow);
     box-shadow: 0 0 24px -10px var(--rs-red-glow);
 }
 
 .rs-modal-icon.is-warning {
-    border-color: rgba(251, 225, 34, 0.3);
-    background: rgba(251, 225, 34, 0.1);
+    border-color: rgb(var(--rs-gold-rgb) / 0.3);
+    background: rgb(var(--rs-gold-rgb) / 0.1);
     color: var(--mu-gold);
-    box-shadow: 0 0 24px -10px rgba(251, 225, 34, 0.55);
+    box-shadow: 0 0 24px -10px rgb(var(--rs-gold-rgb) / 0.55);
 }
 
 .rs-modal-icon svg {
@@ -403,16 +320,4 @@
     justify-content: flex-end;
     gap: 10px;
     margin-top: 24px;
-}
-
-@keyframes rsModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
 }

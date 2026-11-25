@@ -24,6 +24,12 @@
         <p>Masukkan kredensial akun Anda untuk membuka panel sesuai peran.</p>
     </div>
 
+    @if ($errors->any())
+        <x-ui.alert variant="error">
+            {{ $errors->first() }}
+        </x-ui.alert>
+    @endif
+
     <form method="POST" action="{{ route('login.process') }}" class="rs-auth-form">
         @csrf
 

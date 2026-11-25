@@ -47,6 +47,15 @@
             } catch (error) {
                 document.documentElement.dataset.density = 'comfortable';
             }
+
+            try {
+                var theme = window.localStorage.getItem('redstock:theme');
+
+                document.documentElement.dataset.theme =
+                    theme === 'light' ? 'light' : 'dark';
+            } catch (error) {
+                document.documentElement.dataset.theme = 'dark';
+            }
         })();
     </script>
 
@@ -67,6 +76,11 @@
         <span class="rs-bg-grid"></span>
         <span class="rs-bg-glow rs-bg-glow-a"></span>
         <span class="rs-bg-glow rs-bg-glow-b"></span>
+        <span class="rs-bg-beam"></span>
+        <span class="rs-bg-aurora"></span>
+        <span class="rs-bg-spotlight" data-spotlight></span>
+        <span class="rs-bg-trail" data-trail="0"></span>
+        <span class="rs-bg-trail rs-bg-trail-2" data-trail="1"></span>
         <span class="rs-bg-scanlines"></span>
     </div>
 
@@ -200,6 +214,12 @@
                     <button type="button" class="rs-icon-btn" data-density-toggle="compact"
                         aria-label="Ganti kepadatan tampilan" aria-pressed="false" title="Kepadatan tampilan">
                         <x-ui.icon name="layers" />
+                    </button>
+
+                    <button type="button" class="rs-icon-btn" data-theme-toggle
+                        aria-label="Aktifkan tema terang" title="Tema terang">
+                        <x-ui.icon name="moon" class="rs-theme-dark-icon" />
+                        <x-ui.icon name="sun" class="rs-theme-light-icon" />
                     </button>
 
                     <x-ui.notification-center

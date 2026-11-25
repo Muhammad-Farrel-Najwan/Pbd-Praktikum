@@ -1,0 +1,560 @@
+/* ==========================================================================
+   AMBIENT — Living Light
+
+   Lapisan animasi cahaya untuk seluruh aplikasi. Aturan di sini hanya
+   memakai transform dan opacity supaya tetap ringan, dan selalu punya
+   versi redup untuk light mode serta prefers-reduced-motion.
+   ========================================================================== */
+
+:root {
+    --rs-beam-alpha: 0.12;
+    --rs-aurora-alpha: 0.3;
+    --rs-trail-red-alpha: 0.16;
+    --rs-trail-gold-alpha: 0.12;
+    --rs-sheen: rgb(255 255 255 / 0.14);
+}
+
+html[data-theme='light'] {
+    --rs-beam-alpha: 0.05;
+    --rs-aurora-alpha: 0.16;
+    --rs-trail-red-alpha: 0.06;
+    --rs-trail-gold-alpha: 0.05;
+    --rs-sheen: rgb(var(--rs-gold-rgb) / 0.12);
+}
+
+/* ==================== LATAR GLOBAL ==================== */
+
+/* Berkas cahaya diagonal yang melintas pelan dari kiri ke kanan. */
+.rs-bg-beam {
+    position: absolute;
+    top: -30vh;
+    left: -50vw;
+    width: 56vw;
+    height: 160vh;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgb(var(--rs-red-rgb) / var(--rs-beam-alpha)) 34%,
+        rgb(var(--rs-gold-rgb) / calc(var(--rs-beam-alpha) * 0.5)) 52%,
+        transparent 78%
+    );
+    opacity: 0;
+    animation: rsBeamSweep 16s ease-in-out infinite 2s;
+    pointer-events: none;
+}
+
+/* Aurora merah–emas yang berputar sangat lambat di sudut kanan atas. */
+.rs-bg-aurora {
+    position: absolute;
+    top: -22%;
+    right: -14%;
+    width: min(78vw, 980px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 38% 38%, rgb(var(--rs-red-rgb) / var(--rs-aurora-alpha)), transparent 58%),
+        radial-gradient(circle at 64% 66%, rgb(var(--rs-gold-rgb) / calc(var(--rs-aurora-alpha) * 0.55)), transparent 60%);
+    opacity: 0.6;
+    mix-blend-mode: screen;
+    animation: rsAuroraDrift 30s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.rs-bg-aurora::before {
+    content: '';
+    position: absolute;
+    inset: 8%;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0 62%,
+        rgb(var(--rs-red-rgb) / calc(var(--rs-aurora-alpha) * 0.8)) 74%,
+        rgb(var(--rs-gold-rgb) / calc(var(--rs-aurora-alpha) * 0.55)) 82%,
+        transparent 92%
+    );
+    animation: rsAuroraSpin 46s linear infinite;
+}
+
+/* Kilau tipis yang turun melewati scanline. */
+.rs-bg-scanlines::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 18vh;
+    background: linear-gradient(180deg, transparent, rgb(var(--rs-ink-rgb) / 0.05), transparent);
+    opacity: 0;
+    animation: rsScanSweep 14s linear infinite 4s;
+    pointer-events: none;
+}
+
+/* Ekor cahaya yang mengikuti kursor. Posisi ditulis oleh spotlight.js. */
+.rs-bg-trail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 440px;
+    height: 440px;
+    margin: -220px 0 0 -220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(var(--rs-red-rgb) / var(--rs-trail-red-alpha)), transparent 64%);
+    opacity: 0;
+    mix-blend-mode: screen;
+    transform: translate3d(var(--rs-trail-x, -100vw), var(--rs-trail-y, -100vh), 0);
+    transition: opacity 260ms ease;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.rs-bg-trail-2 {
+    width: 280px;
+    height: 280px;
+    margin: -140px 0 0 -140px;
+    background: radial-gradient(circle, rgb(var(--rs-gold-rgb) / var(--rs-trail-gold-alpha)), transparent 66%);
+}
+
+.rs-bg.is-trailing .rs-bg-trail {
+    opacity: 0.9;
+}
+
+/* Hentikan seluruh animasi saat tab tidak aktif. */
+html.is-ambient-paused *,
+html.is-ambient-paused *::before,
+html.is-ambient-paused *::after {
+    animation-play-state: paused !important;
+}
+
+/* ==================== PAGE INTRO ==================== */
+
+/* Sapuan cahaya lembut yang melintas tiap beberapa detik. */
+.rs-page-intro::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    bottom: -60%;
+    left: 0;
+    width: 34%;
+    background: linear-gradient(90deg, transparent, var(--rs-sheen), transparent);
+    opacity: 0;
+    transform: translate3d(-160%, 0, 0) skewX(-16deg);
+    animation: rsHeroSheen 11s ease-in-out infinite 3s;
+    pointer-events: none;
+}
+
+/* Garis emas di tepi atas sekarang mengalir merah–emas. */
+.rs-page-intro::after {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--mu-gold) 16%,
+        var(--rs-accent) 32%,
+        transparent 56%,
+        var(--mu-gold) 78%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    opacity: 0.62;
+    animation: rsHairlineFlow 6s linear infinite;
+}
+
+/* Cincin cahaya 1px yang berjalan mengelilingi border intro. */
+.rs-page-intro-ring {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+        from var(--rs-ring-angle, 0deg),
+        transparent 0 70%,
+        rgb(var(--rs-red-rgb) / 0.9) 82%,
+        var(--mu-gold) 89%,
+        transparent 96%
+    );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: rsRingOrbit 7s linear infinite;
+    pointer-events: none;
+}
+
+.rs-page-intro-rail {
+    animation: rsRailPulse 3.5s ease-in-out infinite;
+}
+
+.rs-page-intro-grid {
+    animation: rsGridDrift 38s linear infinite;
+}
+
+/* ==================== SHELL & NAVIGASI ==================== */
+
+.rs-topbar::after {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--rs-accent) 18%,
+        var(--mu-gold) 38%,
+        transparent 72%
+    );
+    background-size: 200% 100%;
+    opacity: 0.5;
+    animation: rsHairlineFlow 6s linear infinite;
+}
+
+.rs-sidebar::after {
+    background: linear-gradient(
+        180deg,
+        transparent,
+        var(--rs-accent) 18%,
+        var(--mu-gold) 46%,
+        var(--rs-accent) 74%,
+        transparent
+    );
+    background-size: 100% 300%;
+    opacity: 0.55;
+    animation: rsEdgeFlow 7s linear infinite;
+}
+
+.rs-brand::after {
+    background: linear-gradient(90deg, transparent, var(--mu-gold) 26%, var(--rs-accent) 56%, transparent);
+    background-size: 200% 100%;
+    opacity: 0.55;
+    animation: rsHairlineFlow 5s linear infinite;
+}
+
+.rs-brand-logo {
+    animation:
+        rsCrestFloat 8s ease-in-out infinite,
+        rsCrestGlow 5s ease-in-out infinite;
+}
+
+.rs-brand-mark {
+    animation: rsCrestGlow 5s ease-in-out infinite;
+}
+
+.rs-brand-mark::after {
+    animation: rsBadgeGlow 4s ease-in-out infinite;
+}
+
+.rs-nav-link.is-active::before {
+    animation: rsRailPulse 3.6s ease-in-out infinite;
+}
+
+.rs-status-dot {
+    position: relative;
+}
+
+.rs-status-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border: 1px solid var(--rs-success);
+    border-radius: 50%;
+    animation: rsDotPing 2.4s ease-out infinite;
+    pointer-events: none;
+}
+
+/* ==================== PANEL & KARTU ==================== */
+
+.rs-panel::before {
+    background: linear-gradient(90deg, transparent, var(--rs-accent), var(--mu-gold), transparent);
+    background-size: 200% 100%;
+    opacity: 0.55;
+    animation: rsHairlineFlow 7s linear infinite;
+}
+
+.rs-panel::after {
+    animation: rsCornerPulse 8s ease-in-out infinite;
+}
+
+.rs-panel:hover {
+    border-color: var(--rs-border-accent);
+    box-shadow: var(--rs-shadow-panel), 0 0 46px -30px var(--rs-accent-glow);
+}
+
+.rs-panel-foot:has(.rs-form-actions)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rs-accent), var(--mu-gold), transparent);
+    background-size: 200% 100%;
+    opacity: 0.6;
+    animation: rsHairlineFlow 6s linear infinite;
+    pointer-events: none;
+}
+
+/* Rail stat card bernapas, dengan delay bertingkat. */
+.rs-stat-card::before {
+    animation: rsRailPulse 4.2s ease-in-out infinite;
+}
+
+.rs-stat-card:nth-child(2)::before,
+.rs-stat-card:nth-child(2)::after {
+    animation-delay: 0.35s;
+}
+
+.rs-stat-card:nth-child(3)::before,
+.rs-stat-card:nth-child(3)::after {
+    animation-delay: 0.7s;
+}
+
+.rs-stat-card:nth-child(4)::before,
+.rs-stat-card:nth-child(4)::after {
+    animation-delay: 1.05s;
+}
+
+.rs-stat-card:nth-child(5)::before,
+.rs-stat-card:nth-child(5)::after {
+    animation-delay: 1.4s;
+}
+
+.rs-stat-card:nth-child(6)::before,
+.rs-stat-card:nth-child(6)::after {
+    animation-delay: 1.75s;
+}
+
+.rs-stat-card::after {
+    opacity: 0.18;
+    animation: rsHaloPulse 8s ease-in-out infinite;
+}
+
+.rs-stat-card:hover::before,
+.rs-stat-card:hover::after {
+    animation: none;
+    opacity: 1;
+}
+
+.rs-stat-icon {
+    position: relative;
+    isolation: isolate;
+}
+
+.rs-stat-icon::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    z-index: -1;
+    border-radius: 16px;
+    background: radial-gradient(circle, var(--rs-accent-soft), transparent 70%);
+    animation: rsHaloPulse 4.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* ==================== GRAFIK & METER ==================== */
+
+.rs-bar-fill {
+    position: relative;
+    overflow: hidden;
+}
+
+.rs-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 38%;
+    background: linear-gradient(90deg, transparent, var(--rs-sheen), transparent);
+    transform: translate3d(-160%, 0, 0) skewX(-18deg);
+    animation: rsBarShimmer 3.8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.rs-bar-row:nth-child(2) .rs-bar-fill::after {
+    animation-delay: 0.5s;
+}
+
+.rs-bar-row:nth-child(3) .rs-bar-fill::after {
+    animation-delay: 1s;
+}
+
+.rs-bar-row:nth-child(4) .rs-bar-fill::after {
+    animation-delay: 1.5s;
+}
+
+.rs-bar-row:nth-child(5) .rs-bar-fill::after {
+    animation-delay: 2s;
+}
+
+.rs-bar-row:nth-child(6) .rs-bar-fill::after {
+    animation-delay: 2.5s;
+}
+
+.rs-stat-meter-fill {
+    position: relative;
+    overflow: hidden;
+}
+
+.rs-stat-meter-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 42%;
+    background: linear-gradient(90deg, transparent, var(--rs-sheen), transparent);
+    transform: translate3d(-160%, 0, 0) skewX(-18deg);
+    animation: rsBarShimmer 4.6s ease-in-out infinite 0.8s;
+    pointer-events: none;
+}
+
+/* ==================== CTA ==================== */
+
+.rs-page-intro-actions .rs-btn-primary,
+.rs-form-actions .rs-btn-primary,
+.rs-auth-card .rs-btn-primary {
+    animation: rsBtnBreath 4.5s ease-in-out infinite;
+}
+
+/* ==================== LOGIN ==================== */
+
+.rs-auth-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+        from var(--rs-ring-angle, 0deg),
+        transparent 0 72%,
+        rgb(var(--rs-red-rgb) / 0.85) 84%,
+        var(--mu-gold) 91%,
+        transparent 97%
+    );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: rsRingOrbit 7s linear infinite;
+    pointer-events: none;
+}
+
+.rs-auth-visual::after {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--mu-gold) 22%,
+        var(--rs-accent) 46%,
+        transparent 78%
+    );
+    background-size: 200% 100%;
+    opacity: 0.6;
+    animation: rsHairlineFlow 6s linear infinite;
+}
+
+/* ==================== TILT 3D ==================== */
+
+.rs-stat-card,
+.rs-module-card {
+    transform-style: preserve-3d;
+}
+
+.rs-stat-card.is-tilting,
+.rs-module-card.is-tilting {
+    z-index: 2;
+    transition: none;
+    transform: perspective(900px) rotateX(var(--rs-tilt-x, 0deg)) rotateY(var(--rs-tilt-y, 0deg))
+        translateY(-3px) scale(1.012);
+    will-change: transform;
+}
+
+/* ==================== LIGHT MODE ==================== */
+
+html[data-theme='light'] .rs-bg-aurora {
+    opacity: 0.3;
+    mix-blend-mode: multiply;
+}
+
+html[data-theme='light'] .rs-bg-trail {
+    mix-blend-mode: normal;
+}
+
+html[data-theme='light'] .rs-page-intro-ring,
+html[data-theme='light'] .rs-auth-card::before {
+    opacity: 0.7;
+}
+
+html[data-theme='light'] .rs-panel::before,
+html[data-theme='light'] .rs-topbar::after,
+html[data-theme='light'] .rs-sidebar::after,
+html[data-theme='light'] .rs-brand::after,
+html[data-theme='light'] .rs-page-intro::after,
+html[data-theme='light'] .rs-auth-visual::after {
+    opacity: 0.45;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 820px), (pointer: coarse) {
+    .rs-bg-beam,
+    .rs-bg-aurora,
+    .rs-bg-trail {
+        display: none;
+    }
+
+    .rs-page-intro::before {
+        animation-duration: 18s;
+    }
+
+    .rs-stat-card.is-tilting,
+    .rs-module-card.is-tilting {
+        transform: none;
+    }
+}
+
+/* ==================== REDUCED MOTION ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .rs-bg-beam,
+    .rs-bg-aurora,
+    .rs-bg-aurora::before,
+    .rs-bg-scanlines::after,
+    .rs-bg-trail,
+    .rs-page-intro::before,
+    .rs-page-intro::after,
+    .rs-page-intro-ring,
+    .rs-page-intro-rail,
+    .rs-page-intro-grid,
+    .rs-topbar::after,
+    .rs-sidebar::after,
+    .rs-brand::after,
+    .rs-brand-logo,
+    .rs-brand-mark,
+    .rs-brand-mark::after,
+    .rs-nav-link.is-active::before,
+    .rs-status-dot::after,
+    .rs-panel::before,
+    .rs-panel::after,
+    .rs-panel-foot:has(.rs-form-actions)::before,
+    .rs-stat-card::before,
+    .rs-stat-card::after,
+    .rs-stat-icon::after,
+    .rs-bar-fill::after,
+    .rs-stat-meter-fill::after,
+    .rs-page-intro-actions .rs-btn-primary,
+    .rs-form-actions .rs-btn-primary,
+    .rs-auth-card .rs-btn-primary,
+    .rs-auth-card::before,
+    .rs-auth-visual::after {
+        animation: none !important;
+    }
+
+    .rs-stat-card.is-tilting,
+    .rs-module-card.is-tilting {
+        transform: none !important;
+    }
+}

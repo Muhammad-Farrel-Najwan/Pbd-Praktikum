@@ -13,7 +13,7 @@
     width: var(--rs-sidebar-width);
     overflow: hidden;
     background:
-        linear-gradient(180deg, rgba(12, 16, 25, 0.98), rgba(5, 8, 13, 0.99)),
+        linear-gradient(180deg, rgb(var(--rs-surface-rgb) / 0.98), rgb(var(--rs-surface-rgb) / 0.99)),
         var(--rs-bg-soft);
     border-right: 1px solid var(--rs-border);
     box-shadow: 22px 0 60px -40px rgba(0, 0, 0, 0.95);
@@ -26,7 +26,7 @@
     inset: 0;
     background: repeating-linear-gradient(
         135deg,
-        rgba(218, 2, 14, 0.045) 0 2px,
+        rgb(var(--rs-red-rgb) / 0.045) 0 2px,
         transparent 2px 22px
     );
     mask-image: linear-gradient(180deg, #000 0%, transparent 45%);
@@ -79,7 +79,7 @@
     width: 44px;
     height: 44px;
     flex-shrink: 0;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid rgb(var(--rs-ink-rgb) / 0.16);
     border-radius: 13px;
     background: linear-gradient(140deg, var(--mu-red-bright), var(--rs-red-deep));
     color: var(--rs-white);
@@ -88,7 +88,7 @@
     font-weight: 800;
     letter-spacing: -0.05em;
     box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+        inset 0 0 0 1px rgb(var(--rs-ink-rgb) / 0.12),
         0 0 28px -6px var(--rs-accent-glow);
 }
 
@@ -106,7 +106,7 @@
     height: 44px;
     flex-shrink: 0;
     object-fit: contain;
-    filter: drop-shadow(0 0 18px rgba(218, 2, 14, 0.55));
+    filter: drop-shadow(0 0 18px rgb(var(--rs-red-rgb) / 0.55));
 }
 
 .rs-brand-text {
@@ -116,7 +116,7 @@
 }
 
 .rs-brand-name {
-    color: var(--rs-white);
+    color: var(--rs-text);
     font-family: var(--font-display);
     font-size: 16px;
     font-weight: 700;
@@ -192,7 +192,7 @@
 }
 
 .rs-nav-link:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgb(var(--rs-ink-rgb) / 0.04);
     color: var(--rs-text-soft);
     transform: translateX(2px);
 }
@@ -204,8 +204,8 @@
 .rs-nav-link.is-active {
     border-color: var(--rs-border-accent);
     background:
-        linear-gradient(90deg, var(--rs-accent-soft), rgba(255, 255, 255, 0.015));
-    color: var(--rs-white);
+        linear-gradient(90deg, var(--rs-accent-soft), rgb(var(--rs-ink-rgb) / 0.015));
+    color: var(--rs-text);
     font-weight: 600;
     box-shadow:
         inset 0 0 24px -16px var(--rs-accent-glow),
@@ -268,9 +268,9 @@
 .rs-nav-badge {
     margin-left: auto;
     padding: 3px 6px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgb(var(--rs-ink-rgb) / 0.08);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgb(var(--rs-ink-rgb) / 0.04);
     color: var(--rs-muted-dim);
     font-family: var(--font-mono);
     font-size: 8px;
@@ -283,7 +283,7 @@
     margin-top: auto;
     padding: 14px;
     border-top: 1px solid var(--rs-border);
-    background: rgba(255, 255, 255, 0.012);
+    background: rgb(var(--rs-ink-rgb) / 0.012);
 }
 
 .rs-account {
@@ -293,13 +293,13 @@
     padding: 10px;
     border: 1px solid var(--rs-border);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.025);
+    background: rgb(var(--rs-ink-rgb) / 0.025);
     transition: border-color var(--rs-transition), background var(--rs-transition);
 }
 
 .rs-account:hover {
     border-color: var(--rs-border-accent);
-    background: rgba(218, 2, 14, 0.05);
+    background: rgb(var(--rs-red-rgb) / 0.05);
 }
 
 .rs-avatar {
@@ -308,9 +308,9 @@
     width: 38px;
     height: 38px;
     flex-shrink: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(var(--rs-ink-rgb) / 0.1);
     border-radius: 50%;
-    background: linear-gradient(140deg, var(--rs-accent-soft), rgba(255, 255, 255, 0.04));
+    background: linear-gradient(140deg, var(--rs-accent-soft), rgb(var(--rs-ink-rgb) / 0.04));
     color: var(--rs-accent);
     font-family: var(--font-display);
     font-size: 13px;
@@ -351,7 +351,7 @@
     min-height: 40px;
     margin-top: 10px;
     padding: 0 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgb(var(--rs-ink-rgb) / 0.08);
     border-radius: 10px;
     background: transparent;
     color: var(--rs-muted);
@@ -369,8 +369,8 @@
 }
 
 .rs-logout:hover {
-    border-color: rgba(255, 66, 87, 0.45);
-    background: rgba(255, 66, 87, 0.1);
+    border-color: rgb(var(--rs-danger-rgb) / 0.45);
+    background: rgb(var(--rs-danger-rgb) / 0.1);
     color: var(--rs-danger-soft-3);
 }
 
@@ -378,7 +378,7 @@
     position: fixed;
     inset: 0;
     z-index: 35;
-    background: rgba(2, 6, 14, 0.72);
+    background: rgb(var(--rs-surface-rgb) / 0.72);
     opacity: 0;
     visibility: hidden;
     backdrop-filter: blur(4px);
@@ -410,7 +410,7 @@
     gap: 16px;
     min-height: 72px;
     padding: 12px 32px;
-    background: rgba(6, 9, 15, 0.78);
+    background: rgb(var(--rs-surface-rgb) / 0.78);
     border-bottom: 1px solid var(--rs-border);
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
@@ -491,7 +491,7 @@
     padding: 7px 11px;
     border: 1px solid var(--rs-border);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.025);
+    background: rgb(var(--rs-ink-rgb) / 0.025);
     color: var(--rs-muted);
     font-family: var(--font-mono);
     font-size: 9.5px;
@@ -506,7 +506,7 @@
     height: 7px;
     border-radius: 50%;
     background: var(--rs-success);
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14), 0 0 12px rgba(34, 197, 94, 0.65);
+    box-shadow: 0 0 0 3px rgb(var(--rs-success-rgb) / 0.14), 0 0 12px rgb(var(--rs-success-rgb) / 0.65);
     animation: rsBlink 2.6s ease-in-out infinite;
 }
 
@@ -524,7 +524,7 @@
     flex-shrink: 0;
     border: 1px solid var(--rs-border);
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.025);
+    background: rgb(var(--rs-ink-rgb) / 0.025);
     color: var(--rs-muted);
     transition:
         background var(--rs-transition),
@@ -535,7 +535,7 @@
 
 .rs-icon-btn:hover {
     border-color: var(--rs-border-accent);
-    background: rgba(218, 2, 14, 0.1);
+    background: rgb(var(--rs-red-rgb) / 0.1);
     color: var(--rs-text);
     transform: translateY(-1px);
 }
@@ -648,7 +648,7 @@
     padding: 9px 12px;
     border: 1px solid var(--rs-border);
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.025);
+    background: rgb(var(--rs-ink-rgb) / 0.025);
     color: var(--rs-muted);
     font-family: var(--font-mono);
     font-size: 10.5px;

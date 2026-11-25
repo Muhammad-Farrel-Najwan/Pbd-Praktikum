@@ -1,0 +1,662 @@
+/* ==========================================================================
+   MOTION — seluruh keyframe aplikasi
+
+   Semua animasi dikumpulkan di sini supaya mudah diaudit dan dimatikan
+   sekaligus lewat prefers-reduced-motion.
+   ========================================================================== */
+
+/* Sudut cincin cahaya pada border intro & kartu login. */
+@property --rs-ring-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+
+/* ==================== MASUK (REVEAL) ==================== */
+
+@keyframes rsRise {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes rsFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes rsPageIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 8px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes rsSlideInLeft {
+    from {
+        opacity: 0;
+        transform: translate3d(-26px, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes rsSlideInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(26px, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes rsHeadingShine {
+    0%,
+    55% {
+        background-position: 0% center;
+    }
+
+    90%,
+    100% {
+        background-position: 100% center;
+    }
+}
+
+@keyframes rsLineGrow {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes rsUnderlineDraw {
+    from {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    to {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rsHairlineFlow {
+    from {
+        background-position: 0% center;
+    }
+
+    to {
+        background-position: 200% center;
+    }
+}
+
+@keyframes rsHeroSheen {
+    0% {
+        opacity: 0;
+        transform: translate3d(-70%, 0, 0) skewX(-16deg);
+    }
+
+    18%,
+    62% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(320%, 0, 0) skewX(-16deg);
+    }
+}
+
+/* ==================== LATAR ==================== */
+
+@keyframes rsGridDrift {
+    from {
+        background-position: 0 0, 0 0;
+    }
+
+    to {
+        background-position: 56px 56px, 56px 56px;
+    }
+}
+
+@keyframes rsPulse {
+    0%,
+    100% {
+        opacity: 0.72;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.04);
+    }
+}
+
+@keyframes rsScan {
+    0% {
+        transform: translateY(-30%);
+        opacity: 0;
+    }
+
+    18% {
+        opacity: 1;
+    }
+
+    82% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(480%);
+        opacity: 0;
+    }
+}
+
+@keyframes rsBlink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.42;
+    }
+}
+
+@keyframes rsFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes rsSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rsAuthScan {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+
+    12% {
+        opacity: 1;
+    }
+
+    82% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(420%);
+    }
+}
+
+@keyframes rsScanSweep {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0);
+    }
+
+    12%,
+    86% {
+        opacity: 0.55;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 122vh, 0);
+    }
+}
+
+@keyframes rsOrbit {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rsStripesDrift {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 25.46px 25.46px;
+    }
+}
+
+/* ==================== BRAND & SHELL ==================== */
+
+@keyframes rsCrestFloat {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-3px) rotate(-1deg);
+    }
+}
+
+@keyframes rsCrestGlow {
+    0%,
+    100% {
+        filter: drop-shadow(0 0 10px color-mix(in srgb, var(--mu-red) 45%, transparent));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 22px color-mix(in srgb, var(--mu-red) 85%, transparent));
+    }
+}
+
+@keyframes rsRailFlow {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 0 120px;
+    }
+}
+
+@keyframes rsMarquee {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+/* ==================== KOMPONEN ==================== */
+
+@keyframes rsBarGrow {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes rsGlowSweep {
+    from {
+        transform: translateX(-160%) skewX(-18deg);
+    }
+
+    to {
+        transform: translateX(560%) skewX(-18deg);
+    }
+}
+
+@keyframes rsBadgePing {
+    0% {
+        box-shadow: 0 0 0 0 currentColor;
+        opacity: 0.7;
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px transparent;
+        opacity: 0;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 transparent;
+        opacity: 0;
+    }
+}
+
+@keyframes rsNotifIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes rsModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes rsToastIn {
+    from {
+        opacity: 0;
+        transform: translateX(18px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes rsToastOut {
+    to {
+        opacity: 0;
+        transform: translateX(18px) scale(0.97);
+    }
+}
+
+@keyframes rsToastProgress {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes rsIconPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.55);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ==================== KEADAAN KOSONG & INTERAKSI ==================== */
+
+@keyframes rsEmptyFloat {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(0, -5px, 0);
+    }
+}
+
+@keyframes rsCheckPop {
+    0% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.18);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes rsBellRing {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    15% {
+        transform: rotate(12deg);
+    }
+
+    30% {
+        transform: rotate(-10deg);
+    }
+
+    45% {
+        transform: rotate(7deg);
+    }
+
+    60% {
+        transform: rotate(-5deg);
+    }
+
+    75% {
+        transform: rotate(3deg);
+    }
+}
+
+@keyframes rsBadgeGlow {
+    0%,
+    100% {
+        box-shadow: 0 0 14px -2px var(--rs-accent-glow);
+    }
+
+    50% {
+        box-shadow: 0 0 22px 1px var(--rs-accent-glow);
+    }
+}
+
+@keyframes rsRailPulse {
+    0%,
+    100% {
+        opacity: 0.85;
+        box-shadow: 0 0 14px var(--rs-accent-glow);
+    }
+
+    50% {
+        opacity: 1;
+        box-shadow:
+            0 0 22px var(--rs-accent-glow),
+            0 0 36px -8px var(--rs-accent-glow);
+    }
+}
+
+@keyframes rsRipple {
+    from {
+        opacity: 0.55;
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes rsLoadingSweep {
+    from {
+        background-position: 200% 0;
+    }
+
+    to {
+        background-position: -200% 0;
+    }
+}
+
+/* ==================== LIVING LIGHT ==================== */
+
+@keyframes rsBeamSweep {
+    0% {
+        opacity: 0;
+        transform: translate3d(-70vw, 0, 0) rotate(-15deg);
+    }
+
+    12%,
+    76% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(170vw, 0, 0) rotate(-15deg);
+    }
+}
+
+@keyframes rsAuroraDrift {
+    from {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    to {
+        transform: translate3d(-7%, 6%, 0) scale(1.14);
+    }
+}
+
+@keyframes rsAuroraSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rsRingOrbit {
+    from {
+        --rs-ring-angle: 0deg;
+    }
+
+    to {
+        --rs-ring-angle: 360deg;
+    }
+}
+
+@keyframes rsEdgeFlow {
+    from {
+        background-position: 0 -150%;
+    }
+
+    to {
+        background-position: 0 150%;
+    }
+}
+
+@keyframes rsBarShimmer {
+    from {
+        transform: translate3d(-160%, 0, 0) skewX(-18deg);
+    }
+
+    to {
+        transform: translate3d(420%, 0, 0) skewX(-18deg);
+    }
+}
+
+@keyframes rsHaloPulse {
+    0%,
+    100% {
+        opacity: 0.28;
+        transform: scale(0.9);
+    }
+
+    50% {
+        opacity: 0.62;
+        transform: scale(1.08);
+    }
+}
+
+@keyframes rsCornerPulse {
+    0%,
+    100% {
+        opacity: 0.42;
+    }
+
+    50% {
+        opacity: 0.78;
+    }
+}
+
+@keyframes rsBtnBreath {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgb(var(--rs-red-rgb) / 0.22),
+            0 14px 30px -18px rgb(var(--rs-red-rgb) / 0.95),
+            0 0 18px -12px var(--rs-accent-glow);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 1px rgb(var(--rs-red-rgb) / 0.34),
+            0 18px 42px -18px rgb(var(--rs-red-rgb) / 1),
+            0 0 34px -10px var(--rs-accent-glow);
+    }
+}
+
+@keyframes rsDotPing {
+    0% {
+        opacity: 0.8;
+        transform: scale(0.55);
+    }
+
+    72%,
+    100% {
+        opacity: 0;
+        transform: scale(1.9);
+    }
+}
+
+@keyframes rsPageOut {
+    to {
+        opacity: 0;
+    }
+}
+
+/* ==================== REDUCED MOTION ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .js [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+}

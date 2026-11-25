@@ -8,9 +8,9 @@
     $navigation = [
         ['label' => 'Dashboard', 'route' => 'manager.dashboard', 'active' => 'manager.dashboard', 'icon' => 'grid'],
         ['section' => 'Analitik'],
-        ['label' => 'Laporan Penjualan', 'icon' => 'chart', 'disabled' => true, 'badge' => 'Segera'],
-        ['label' => 'Laporan Stok', 'icon' => 'database', 'disabled' => true, 'badge' => 'Segera'],
-        ['label' => 'Approval Pengadaan', 'icon' => 'check', 'disabled' => true, 'badge' => 'Segera'],
+        ['label' => 'Laporan Penjualan', 'route' => 'manager.laporan.penjualan', 'active' => 'manager.laporan.penjualan', 'icon' => 'chart'],
+        ['label' => 'Laporan Stok', 'route' => 'manager.laporan.stok', 'active' => ['manager.laporan.stok', 'manager.laporan.stok.detail'], 'icon' => 'database'],
+        ['label' => 'Approval Pengadaan', 'route' => 'manager.approval.index', 'active' => ['manager.approval.index', 'manager.approval.detail'], 'icon' => 'check'],
     ];
 @endphp
 
